@@ -435,7 +435,7 @@
           <option value="short">Shortest first</option>
           <option value="long">Longest first</option>
         </select>
-        <button id="addVideoBtn" class="btn-primary" onclick="openUploadModal()" style="white-space: nowrap; display: inline-flex;">+ Add Video 添加视频</button>
+        <button id="addVideoBtn" class="btn-primary" onclick="openUploadModal()" style="white-space: nowrap; display: none;">+ Add Video 添加视频</button>
       </div>
     </div>
     <div class="cards-grid" id="cardsGrid">
@@ -967,7 +967,7 @@
       <button class="mode-btn" data-mode="blank" onclick="setMode(&#39;blank&#39;)">Fill-in</button>
     </div>
     <!-- API Key (admin only) -->
-    <div id="apiKeyZone" style="display: flex; align-items: center; gap: 8px;">
+    <div id="apiKeyZone" style="display: none; align-items: center; gap: 8px;">
       <input id="apiKeyInput" type="password" placeholder="sk-... OpenAI API Key" style="width:160px;background:#f0ece4;border:1px solid #d8d0c0;border-radius:8px;padding:6px 10px;font-size:12px;color:#555;outline:none;font-family:monospace;">
       <button onclick="saveApiKey()" style="background:#3a7bd5;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;color:white;">Save</button>
       <span id="apiKeySaved" style="font-size: 11px; color: rgb(42, 138, 42); display: none;">✓</span>
@@ -994,7 +994,7 @@
           <button id="speedBtn" onclick="cycleSpeed()" style="background:#ede8df;border:none;border-radius:8px;padding:6px 12px;color:#555;font-size:13px;font-weight:700;cursor:pointer;min-width:48px;">1x</button>
           <button onclick="toggleVideo()" style="background:#ede8df;border:none;border-radius:8px;padding:6px 12px;color:#555;font-size:12px;cursor:pointer;">🙈 Hide</button>
           <!-- Attach video file button (admin only) -->
-          <button id="attachVideoBtn" onclick="attachVideoFile()" style="background: rgb(237, 232, 223); border: none; border-radius: 8px; padding: 6px 12px; color: rgb(85, 85, 85); font-size: 12px; cursor: pointer; display: inline-flex;">📎 Attach Video</button>
+          <button id="attachVideoBtn" onclick="attachVideoFile()" style="background: rgb(237, 232, 223); border: none; border-radius: 8px; padding: 6px 12px; color: rgb(85, 85, 85); font-size: 12px; cursor: pointer; display: none;">📎 Attach Video</button>
           <input type="file" id="attachFileInput" accept="video/*" style="display:none" onchange="onAttachFile(this)">
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
@@ -1004,7 +1004,7 @@
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <button id="loopBtn" onclick="toggleLoop()" style="background: rgb(237, 232, 223); border: none; border-radius: 8px; padding: 6px 12px; color: rgb(136, 136, 136); font-size: 12px; cursor: pointer;">🔁 Loop</button>
-          <button onclick="generateTranscript()" id="genBtn" style="background: linear-gradient(135deg, rgb(102, 126, 234), rgb(118, 75, 162)); border: none; border-radius: 8px; padding: 6px 16px; color: white; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: rgba(102, 126, 234, 0.4) 0px 2px 6px; display: inline-flex;">↻ Re-transcribe</button>
+          <button onclick="generateTranscript()" id="genBtn" style="background: linear-gradient(135deg, rgb(102, 126, 234), rgb(118, 75, 162)); border: none; border-radius: 8px; padding: 6px 16px; color: white; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: rgba(102, 126, 234, 0.4) 0px 2px 6px; display: none;">↻ Re-transcribe</button>
         </div>
       </div>
     </div>
@@ -1264,7 +1264,7 @@
       onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1a1a1a'">
       Enter →
     </button>
-    <p style="font-size:11px;color:#ccc;margin-top:16px;">Don't have a code? Contact the site owner.</p>
+    <p style="font-size:11px;color:#ccc;margin-top:16px;">Contact the site owner for an invite code.</p>
   </div>
 </div>
 
@@ -1583,7 +1583,7 @@ function openCard(id){
     iframe.style.cssText = 'width:100%;height:100%;border:none;position:absolute;inset:0;';
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     iframe.allowFullscreen = true;
-    iframe.src = `https://www.youtube.com/embed/${ytId}?enablejsapi=1&rel=0&modestbranding=1&origin=${encodeURIComponent(location.origin||'file://')}&playsinline=1`;
+    iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?enablejsapi=1&rel=0&modestbranding=1&playsinline=1`;
     pw.appendChild(iframe);
 
     // Load YouTube IFrame API for JS control
@@ -1633,10 +1633,11 @@ function openCard(id){
   document.getElementById('mainPlayBtn').textContent = '▶';
   setMode('bilingual');
 
-  // Admin controls visibility
+  // Admin controls visibility - show only for admin
   document.getElementById('attachVideoBtn').style.display = isAdmin ? 'inline-flex' : 'none';
   document.getElementById('genBtn').style.display = isAdmin ? 'inline-flex' : 'none';
   document.getElementById('apiKeyZone').style.display = isAdmin ? 'flex' : 'none';
+  // YouTube player available to ALL users - no restriction
 
   document.getElementById('playerModal').style.display = 'flex';
   document.body.style.overflow = 'hidden';
