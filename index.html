@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///Users/nathalie/Downloads/SpeakReal_latest_3.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script src="./SpeakReal · Authentic Mandarin from Real Life_files/supabase-js@2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpeakReal · Authentic Mandarin from Real Life</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: #f9f9f7;
+    color: #333;
+    min-height: 100vh;
+  }
+  header {
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .logo { text-decoration: none; color: #333; display: flex; flex-direction: column; align-items: center; }
+  .logo h1 { font-size: 22px; font-weight: 800; font-family: Georgia, serif; letter-spacing: 0px; }
+  .logo .subtitle { font-size: 10px; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+  nav { display: flex; gap: 24px; align-items: center; }
+  nav a { text-decoration: none; color: #555; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  nav a:hover, nav a.active { color: #111; }
+  nav a.active { font-weight: 600; border-bottom: 2px solid #333; padding-bottom: 2px; }
+  .main-container { max-width: 1200px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 230px 1fr; gap: 24px; }
+  .sidebar { position: sticky; top: 72px; height: fit-content; display: flex; flex-direction: column; gap: 16px; }
+  .box { background: white; border-radius: 16px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .stats-header { font-size: 12px; color: #888; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .total-count { font-size: 32px; font-weight: 800; color: #222; margin-bottom: 12px; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .stat-item { background: #f5f5f5; border-radius: 10px; padding: 10px; cursor: pointer; transition: background 0.2s; }
+  .stat-item:hover { background: #ebebeb; }
+  .stat-item .s-label { font-size: 11px; color: #888; margin-bottom: 2px; }
+  .stat-item .s-value { font-size: 20px; font-weight: 700; color: #333; }
+  .stat-item .s-sub { font-size: 10px; color: #bbb; }
+  .continue-btn { display: block; width: 100%; background: #e8f4fd; border: 1.5px solid #bcd9f4; color: #2776b8; border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; font-family: inherit; transition: background 0.2s; }
+  .continue-btn:hover { background: #d0e9f8; }
+  .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .filter-header .f-title { font-size: 14px; font-weight: 600; }
+  .filter-header .f-clear { font-size: 12px; color: #999; background: none; border: none; cursor: pointer; font-family: inherit; }
+  .filter-section { margin-bottom: 14px; }
+  .filter-section:last-child { margin-bottom: 0; }
+  .filter-label { font-size: 11px; color: #888; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 1px solid #e0e0e0; background: white; cursor: pointer; transition: all 0.15s; color: #555; }
+  .tag:hover { border-color: #bbb; background: #f9f9f9; }
+  .tag.active { background: #1a1a1a; color: white; border-color: #1a1a1a; }
+  .topics-wrap { max-height: 90px; overflow: hidden; }
+  .topics-wrap.open { max-height: none; }
+  .show-more-btn { font-size: 12px; color: #2776b8; background: none; border: none; cursor: pointer; margin-top: 6px; font-family: inherit; padding: 0; }
+  .content-area { min-width: 0; }
+  .search-bar { display: flex; align-items: center; gap: 10px; background: white; border: 1.5px solid #e8e8e8; border-radius: 12px; padding: 10px 16px; margin-bottom: 18px; transition: border-color 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .search-bar:focus-within { border-color: #aaa; }
+  .search-bar input { border: none; background: none; font-size: 14px; outline: none; flex: 1; color: #333; font-family: inherit; }
+  .search-bar input::placeholder { color: #bbb; }
+  .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .result-info { font-size: 13px; color: #999; }
+  .sort-sel { font-size: 13px; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 6px 10px; background: white; cursor: pointer; font-family: inherit; color: #555; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: 16px; }
+  .video-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 5px rgba(0,0,0,0.07); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+  .video-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+  .thumb { position: relative; aspect-ratio: 16/9; display: flex; flex-direction: column; justify-content: space-between; padding: 10px; overflow: hidden; }
+  .thumb video.thumb-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .thumb-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.35)); z-index: 1; }
+  .t1{background:linear-gradient(135deg,#f093fb,#f5576c)}.t2{background:linear-gradient(135deg,#4facfe,#00f2fe)}.t3{background:linear-gradient(135deg,#43e97b,#38f9d7)}.t4{background:linear-gradient(135deg,#fa709a,#fee140)}.t5{background:linear-gradient(135deg,#a18cd1,#fbc2eb)}.t6{background:linear-gradient(135deg,#ffecd2,#fcb69f)}.t7{background:linear-gradient(135deg,#96fbc4,#f9f586)}.t8{background:linear-gradient(135deg,#667eea,#764ba2)}
+  .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; background: rgba(0,0,0,0.1); z-index: 2; }
+  .play-circle { width: 42px; height: 42px; background: rgba(255,255,255,0.3); backdrop-filter: blur(4px); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .play-circle::after { content: '▶'; color: white; font-size: 16px; margin-left: 3px; }
+  .video-card:hover .play-overlay { opacity: 1; }
+  .thumb-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 3; }
+  .dur { background: rgba(0,0,0,0.45); color: white; font-size: 11px; padding: 3px 7px; border-radius: 6px; font-weight: 600; }
+  .bm-btn { background: none; border: none; cursor: pointer; color: white; font-size: 18px; line-height: 1; opacity: 0.9; transition: transform 0.15s; }
+  .bm-btn:hover { transform: scale(1.2); }
+  .thumb-bottom { display: flex; align-items: center; gap: 6px; position: relative; z-index: 3; }
+  .c-name { color: white; font-size: 12px; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+  .c-flag { font-size: 15px; }
+  .card-body { padding: 12px 14px; }
+  .ep-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .ep-num { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .star-btn { background: none; border: none; cursor: pointer; font-size: 16px; color: #d4b200; }
+  .c-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  .c-tag { font-size: 11px; padding: 2px 8px; background: #f2f2f2; color: #666; border-radius: 12px; }
+  .c-accent { font-size: 11px; color: #aaa; }
+
+  /* ── 上传按钮 ── */
+  .upload-area {
+    border: 2px dashed #d0d0d0;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    margin-bottom: 18px;
+  }
+  .upload-area:hover { border-color: #2776b8; background: #f0f7ff; }
+  .upload-area.drag-over { border-color: #2776b8; background: #e8f4fd; }
+  .upload-icon { font-size: 28px; margin-bottom: 6px; }
+  .upload-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 4px; }
+  .upload-hint { font-size: 12px; color: #aaa; }
+  .upload-btn-row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+  .btn-primary { background: #1a1a1a; color: white; border: none; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+  .btn-primary:hover { background: #333; }
+  .btn-secondary { background: white; color: #333; border: 1.5px solid #ddd; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .btn-secondary:hover { border-color: #aaa; }
+
+  /* ── 弹窗 modal ── */
+  .modal-bg {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 820px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .modal-title { font-size: 18px; font-weight: 700; }
+  .modal-sub { font-size: 13px; color: #888; margin-top: 2px; }
+  .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #999; line-height: 1; padding: 0 4px; }
+  .modal-close:hover { color: #333; }
+  .modal-body { padding: 20px 24px; }
+
+  /* 视频播放器 */
+  .video-player-wrap {
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-player-wrap video { width: 100%; height: 100%; object-fit: contain; }
+  .video-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #555;
+  }
+  .video-placeholder .ph-icon { font-size: 40px; }
+  .video-placeholder p { font-size: 13px; }
+
+  /* 文稿区域 */
+  .transcript-section { margin-top: 16px; }
+  .transcript-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .transcript-title { font-size: 14px; font-weight: 700; }
+  .ai-badge { font-size: 11px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+  .transcript-actions { display: flex; gap: 8px; }
+  .transcript-box {
+    background: #f8f8f8;
+    border: 1px solid #ebebeb;
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 120px;
+    font-size: 14px;
+    line-height: 1.9;
+    color: #333;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .transcript-box.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 13px;
+    gap: 8px;
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid #ddd;
+    border-top-color: #2776b8;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .transcript-empty { color: #bbb; font-size: 13px; font-style: italic; }
+
+  /* 文稿词汇高亮 */
+  .transcript-box .vocab { background: #fff4c2; border-radius: 3px; padding: 0 2px; cursor: help; }
+
+  /* 上传进度 */
+  .upload-progress { margin-top: 10px; display: none; }
+  .progress-bar-bg { height: 6px; background: #eee; border-radius: 4px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #4facfe, #00f2fe); border-radius: 4px; transition: width 0.3s; }
+  .progress-label { font-size: 12px; color: #888; margin-top: 4px; text-align: center; }
+
+  /* 上传卡片（在grid里） */
+  .upload-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.07);
+    border: 2px dashed #d5d5d5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: auto;
+    min-height: 200px;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 20px;
+    text-align: center;
+  }
+  .upload-card:hover { border-color: #2776b8; background: #f5f9ff; transform: translateY(-2px); }
+  .upload-card-icon { font-size: 32px; margin-bottom: 8px; }
+  .upload-card-title { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 4px; }
+  .upload-card-hint { font-size: 11px; color: #bbb; }
+
+  /* 上传视频的卡片外观 */
+  .video-card.user-upload .thumb { background: linear-gradient(135deg, #2193b0, #6dd5ed); }
+  .user-upload-badge { position: absolute; top: 6px; right: 6px; background: rgba(255,255,255,0.25); backdrop-filter: blur(4px); border-radius: 6px; padding: 2px 7px; font-size: 10px; color: white; font-weight: 700; z-index: 3; }
+
+  /* 生成文稿按钮 */
+  .gen-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .gen-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: white;
+    color: #555;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { border-color: #aaa; }
+
+  /* 文稿元数据 */
+  .transcript-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .meta-chip { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: #f0f0f0; color: #666; }
+
+  /* 上传modal */
+  .upload-modal-form { display: flex; flex-direction: column; gap: 14px; }
+  .form-row { display: flex; flex-direction: column; gap: 5px; }
+  .form-label { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-input { border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+  .form-input:focus { border-color: #2776b8; }
+  .form-select { border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: inherit; outline: none; background: white; }
+  .drop-zone {
+    border: 2px dashed #d0d0d0;
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafafa;
+  }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: #2776b8; background: #f0f7ff; }
+  .drop-zone .dz-icon { font-size: 32px; margin-bottom: 6px; }
+  .drop-zone .dz-text { font-size: 13px; color: #555; font-weight: 600; margin-bottom: 3px; }
+  .drop-zone .dz-sub { font-size: 12px; color: #bbb; }
+  .file-selected { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #f0f7ff; border-radius: 10px; border: 1px solid #bcd9f4; }
+  .file-selected .fs-name { font-size: 13px; font-weight: 600; color: #2776b8; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-selected .fs-size { font-size: 11px; color: #aaa; flex-shrink: 0; }
+  .file-selected .fs-remove { background: none; border: none; color: #aaa; cursor: pointer; font-size: 16px; padding: 0; }
+  .form-row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  @media(max-width:768px){
+    .main-container{grid-template-columns:1fr;padding:16px;}
+    .sidebar{position:static;}
+    nav{gap:12px;}
+    .cards-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+    .form-row-2col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body style="">
+<header>
+  <a href="file:///Users/nathalie/Downloads/hanlab-chinese-learning-bilingual_5.html#" class="logo">
+    <h1>SpeakReal</h1>
+    <div class="subtitle">Authentic Mandarin from Real Life</div>
+  </a>
+  <nav>
+    <a href="file:///Users/nathalie/Downloads/hanlab-chinese-learning-bilingual_5.html#" class="active">Library 目录</a>
+    <a href="file:///Users/nathalie/Downloads/hanlab-chinese-learning-bilingual_5.html#" onclick="openInviteModal();return false;" id="adminNavBtn" style="color: rgb(42, 138, 42); font-size: 13px;">🔓 Admin</a>
+  </nav>
+</header>
+
+<div class="main-container">
+  <aside class="sidebar">
+    <div class="box">
+      <div class="stats-header"><span>Total Episodes</span><span style="font-size:10px;color:#bbb">Updating...</span></div>
+      <div class="total-count" id="totalCount">22</div>
+      <div class="stats-grid">
+        <div class="stat-item"><div class="s-label">✅ Studied 已学习</div><div class="s-value" id="learnedCount">0</div><div class="s-sub">My Progress</div></div>
+        <div class="stat-item"><div class="s-label">📚 To Study 未学习</div><div class="s-value" id="unlearnedCount">20</div><div class="s-sub">Remaining</div></div>
+      </div>
+      <button class="continue-btn">Continue Learning → Last: Ep.1</button>
+    </div>
+
+    <!-- Saved Videos Box -->
+    <div class="box" id="savedBox" style="display: none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-size:13px;font-weight:700;">⭐ Saved Videos</span>
+        <span id="savedCountBadge" style="background:#f5d87a;color:#7a5800;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">1</span>
+      </div>
+      <div id="savedList" style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;"><div onclick="openCard(1)" style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#f9f9f7;border-radius:8px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background=&#39;#f0ece4&#39;" onmouseout="this.style.background=&#39;#f9f9f7&#39;">
+      <div style="width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#f093fb,#f5576c);flex-shrink:0;"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:12px;font-weight:700;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Ep.1 · @李明Ming</div>
+        <div style="font-size:10px;color:#aaa;">日常, 生活</div>
+      </div>
+      <button onclick="event.stopPropagation();saved.delete(1);renderSavedList();renderCards();" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:14px;padding:0;">✕</button>
+    </div></div>
+    </div>
+    <div class="box">
+      <div class="filter-header">
+        <span class="f-title">Filters 筛选</span>
+        <button class="f-clear" onclick="clearFilters()">Clear 清除</button>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Sort 排序</div>
+        <div class="tags">
+          <span class="tag active" data-group="sort" data-val="asc">Asc ↑</span>
+          <span class="tag" data-group="sort" data-val="desc">Desc ↓</span>
+          <span class="tag" data-group="sort" data-val="rand">Random 随机</span>
+        </div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Level</div>
+        <div class="tags">
+          <span class="tag" data-group="level" data-val="入门">Beginner</span>
+          <span class="tag" data-group="level" data-val="中级">Intermediate</span>
+          <span class="tag" data-group="level" data-val="高级">Advanced</span>
+        </div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Gender</div>
+        <div class="tags">
+          <span class="tag active" data-group="gender" data-val="all">All</span>
+          <span class="tag" data-group="gender" data-val="male">Male</span>
+          <span class="tag" data-group="gender" data-val="female">Female</span>
+        </div>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Topics</div>
+        <div class="tags topics-wrap open" id="topicWrap">
+          <span class="tag active" data-group="topic" data-val="all">All</span>
+          <span class="tag" data-group="topic" data-val="日常">Daily Life</span>
+          <span class="tag" data-group="topic" data-val="旅行">Travel</span>
+          <span class="tag" data-group="topic" data-val="美食">Food</span>
+          <span class="tag" data-group="topic" data-val="生活">Lifestyle</span>
+          <span class="tag" data-group="topic" data-val="文化">Culture</span>
+          <span class="tag" data-group="topic" data-val="学习">Study</span>
+          <span class="tag" data-group="topic" data-val="科技">Tech</span>
+          <span class="tag" data-group="topic" data-val="娱乐">Entertainment</span>
+          <span class="tag" data-group="topic" data-val="情感">Emotions</span>
+          <span class="tag" data-group="topic" data-val="运动">Sports</span>
+          <span class="tag" data-group="topic" data-val="健康">Health</span>
+          <span class="tag" data-group="topic" data-val="职场">Work</span>
+          <span class="tag" data-group="topic" data-val="家居">Home</span>
+          <span class="tag" data-group="topic" data-val="时尚">Fashion</span>
+          <span class="tag" data-group="topic" data-val="宠物">Pets</span>
+          <span class="tag" data-group="topic" data-val="音乐">Music</span>
+          <span class="tag" data-group="topic" data-val="摄影">Photography</span>
+          <span class="tag" data-group="topic" data-val="自然">Nature</span>
+          <span class="tag" data-group="topic" data-val="户外">Outdoors</span>
+          <span class="tag" data-group="topic" data-val="创作">Creative</span>
+          <span class="tag" data-group="topic" data-val="烹饪">Cooking</span>
+          <span class="tag" data-group="topic" data-val="历史">History</span>
+          <span class="tag" data-group="topic" data-val="阅读">Reading</span>
+          <span class="tag" data-group="topic" data-val="游戏">Gaming</span>
+        </div>
+        <button class="show-more-btn" id="topicToggle" onclick="toggleTopics()">Collapse 收起 ▲</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content-area">
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" placeholder="Search creators, topics, vocab... 搜索" id="searchInput" oninput="renderCards()">
+    </div>
+    <div class="content-header">
+      <span class="result-info" id="resultInfo">Total 22 eps · Showing 22  eps</span>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <select class="sort-sel" id="sortSel" onchange="renderCards()">
+          <option value="asc">按 eps数正序</option>
+          <option value="desc">按 eps数倒序</option>
+          <option value="short">Shortest first</option>
+          <option value="long">Longest first</option>
+        </select>
+        <button id="addVideoBtn" class="btn-primary" onclick="openUploadModal()" style="white-space: nowrap; display: inline-flex;">+ Add Video 添加视频</button>
+      </div>
+    </div>
+    <div class="cards-grid" id="cardsGrid">
+    <div class="video-card" onclick="openCard(1)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(1)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(1)" title="Delete">🗑️</button></div>
+      <div class="thumb t1">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:32</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,1)" id="bm1">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@李明Ming</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.1</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">日常</span><span class="c-tag">生活</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(2)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(2)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(2)" title="Delete">🗑️</button></div>
+      <div class="thumb t2">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">2:15</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,2)" id="bm2">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@小雅Xiao</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.2</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fff4e0;color:#b87400">Intermediate</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">旅行</span><span class="c-tag">文化</span></div>
+        <div class="c-accent">Accent: 台湾腔</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(3)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(3)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(3)" title="Delete">🗑️</button></div>
+      <div class="thumb t3">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:45</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,3)" id="bm3">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@阿强Aqiang</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.3</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fff4e0;color:#b87400">Intermediate</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">美食</span><span class="c-tag">烹饪</span></div>
+        <div class="c-accent">Accent: 粤语</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(4)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(4)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(4)" title="Delete">🗑️</button></div>
+      <div class="thumb t4">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">3:02</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,4)" id="bm4">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@思思Sisi</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.4</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fde8e8;color:#b82727">Advanced</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">情感</span><span class="c-tag">成长</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(5)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(5)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(5)" title="Delete">🗑️</button></div>
+      <div class="thumb t5">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:18</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,5)" id="bm5">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@文哥Wenge</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.5</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">科技</span><span class="c-tag">数码</span></div>
+        <div class="c-accent">Accent: 东北话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(6)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(6)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(6)" title="Delete">🗑️</button></div>
+      <div class="thumb t6">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">2:40</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,6)" id="bm6">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@嘉嘉Jiajia</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.6</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">时尚</span><span class="c-tag">购物</span></div>
+        <div class="c-accent">Accent: 台湾腔</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(7)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(7)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(7)" title="Delete">🗑️</button></div>
+      <div class="thumb t7">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:55</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,7)" id="bm7">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@大壮Dazhuang</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.7</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8fde8;color:#2a8a2a">Beginner</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">运动</span><span class="c-tag">户外</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(8)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(8)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(8)" title="Delete">🗑️</button></div>
+      <div class="thumb t8">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">2:28</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,8)" id="bm8">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@晓燕Xiaoyan</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.8</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">宠物</span><span class="c-tag">日常</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(9)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(9)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(9)" title="Delete">🗑️</button></div>
+      <div class="thumb t1">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:10</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,9)" id="bm9">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@阿明Aming</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.9</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8fde8;color:#2a8a2a">Beginner</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">美食</span><span class="c-tag">生活</span></div>
+        <div class="c-accent">Accent: 四川话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(10)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(10)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(10)" title="Delete">🗑️</button></div>
+      <div class="thumb t2">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">3:30</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,10)" id="bm10">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@悦悦Yueyue</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.10</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fde8e8;color:#b82727">Advanced</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">音乐</span><span class="c-tag">创作</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(11)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(11)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(11)" title="Delete">🗑️</button></div>
+      <div class="thumb t3">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">2:05</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,11)" id="bm11">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@浩然Haoran</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.11</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fff4e0;color:#b87400">Intermediate</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">职场</span><span class="c-tag">商务</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(12)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(12)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(12)" title="Delete">🗑️</button></div>
+      <div class="thumb t4">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:42</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,12)" id="bm12">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@小莹Xiaoying</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.12</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">健康</span><span class="c-tag">生活</span></div>
+        <div class="c-accent">Accent: 台湾腔</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(13)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(13)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(13)" title="Delete">🗑️</button></div>
+      <div class="thumb t5">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">2:55</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,13)" id="bm13">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@大牛Daniu</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.13</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fff4e0;color:#b87400">Intermediate</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">旅行</span><span class="c-tag">户外</span></div>
+        <div class="c-accent">Accent: 东北话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(14)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(14)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(14)" title="Delete">🗑️</button></div>
+      <div class="thumb t6">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:38</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,14)" id="bm14">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@璐璐Lulu</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.14</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">家居</span><span class="c-tag">生活</span></div>
+        <div class="c-accent">Accent: 上海话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(15)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(15)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(15)" title="Delete">🗑️</button></div>
+      <div class="thumb t7">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">2:12</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,15)" id="bm15">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@子轩Zixuan</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.15</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fff4e0;color:#b87400">Intermediate</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">学习</span><span class="c-tag">阅读</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(16)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(16)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(16)" title="Delete">🗑️</button></div>
+      <div class="thumb t8">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:50</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,16)" id="bm16">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@彩虹Caihong</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.16</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">摄影</span><span class="c-tag">创作</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(17)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(17)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(17)" title="Delete">🗑️</button></div>
+      <div class="thumb t1">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">3:15</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,17)" id="bm17">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@老吴Laowu</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.17</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fde8e8;color:#b82727">Advanced</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">文化</span><span class="c-tag">历史</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(18)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(18)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(18)" title="Delete">🗑️</button></div>
+      <div class="thumb t2">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:25</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,18)" id="bm18">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@萌萌Mengmeng</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.18</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8fde8;color:#2a8a2a">Beginner</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">娱乐</span><span class="c-tag">综艺</span></div>
+        <div class="c-accent">Accent: 台湾腔</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(19)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(19)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(19)" title="Delete">🗑️</button></div>
+      <div class="thumb t3">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">2:35</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,19)" id="bm19">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@志远Zhiyuan</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.19</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fff4e0;color:#b87400">Intermediate</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">科技</span><span class="c-tag">游戏</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card" onclick="openCard(20)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(20)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(20)" title="Delete">🗑️</button></div>
+      <div class="thumb t4">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">1:48</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,20)" id="bm20">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          
+          <span class="c-name">@佳佳Jiajia</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.20</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#fff4e0;color:#b87400">Intermediate</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">情感</span><span class="c-tag">心理</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card user-upload" onclick="openCard(21)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(21)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(21)" title="Delete">🗑️</button></div>
+      <div class="thumb t3">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">0:32</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,21)" id="bm21">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          <span class="user-upload-badge">Mine</span>
+          <span class="c-name">@匿名用户</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.21</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">日常</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div>
+    <div class="video-card user-upload" onclick="openCard(22)" style="position:relative;">
+      <div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(22)" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(22)" title="Delete">🗑️</button></div>
+      <div class="thumb t7">
+        
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">0:00</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,22)" id="bm22">☆</button>
+        </div>
+        <div class="thumb-bottom">
+          <span class="user-upload-badge">Mine</span>
+          <span class="c-name">@匿名用户</span>
+          <span class="c-flag">🇨🇳</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.22</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:#e8f4fd;color:#2776b8">Elementary</span>
+        </div>
+        <div class="c-tags"><span class="c-tag">日常</span></div>
+        <div class="c-accent">Accent: 普通话</div>
+      </div>
+    </div></div>
+  </main>
+</div>
+
+<!-- ─── 全屏学习播放器 ─── -->
+<div id="playerModal" style="display: none; position: fixed; inset: 0px; background: rgb(245, 240, 232); z-index: 1000; flex-direction: column;">
+
+  <!-- 顶部栏 -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:#fffdf9;border-bottom:1px solid #e8e0d0;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button onclick="closeDetailModal()" style="background:none;border:none;color:#999;font-size:20px;cursor:pointer;line-height:1;">←</button>
+      <div>
+        <span id="pmTitle" style="color:#1a1a1a;font-weight:700;font-size:15px;">Ep. 1  eps · @李明Ming</span>
+        <span id="pmSub" style="color:#aaa;font-size:13px;margin-left:10px;">普通话 · 初级 · 日常 生活</span>
+      </div>
+    </div>
+    <!-- 模式切换 -->
+    <div style="display:flex;gap:4px;background:#ede8df;border-radius:10px;padding:4px;">
+      <button class="mode-btn active" data-mode="bilingual" onclick="setMode(&#39;bilingual&#39;)">Bilingual</button>
+      <button class="mode-btn" data-mode="zh" onclick="setMode(&#39;zh&#39;)">Chinese</button>
+      <button class="mode-btn" data-mode="en" onclick="setMode(&#39;en&#39;)">English</button>
+      <button class="mode-btn" data-mode="dictation" onclick="setMode(&#39;dictation&#39;)">Dictation</button>
+      <button class="mode-btn" data-mode="blank" onclick="setMode(&#39;blank&#39;)">Fill-in</button>
+    </div>
+    <!-- API Key (admin only) -->
+    <div id="apiKeyZone" style="display: flex; align-items: center; gap: 8px;">
+      <input id="apiKeyInput" type="password" placeholder="sk-... OpenAI API Key" style="width:160px;background:#f0ece4;border:1px solid #d8d0c0;border-radius:8px;padding:6px 10px;font-size:12px;color:#555;outline:none;font-family:monospace;">
+      <button onclick="saveApiKey()" style="background:#3a7bd5;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;color:white;">Save</button>
+      <span id="apiKeySaved" style="font-size: 11px; color: rgb(42, 138, 42); display: none;">✓</span>
+    </div>
+  </div>
+
+  <!-- 主体：左视频 + 右文稿 -->
+  <div style="display:flex;flex:1;overflow:hidden;">
+
+    <!-- 左：视频区 -->
+    <div style="flex:1;display:flex;flex-direction:column;background:#f5f0e8;min-width:0;">
+      <!-- 视频 -->
+      <div style="flex: 1 1 0%; display: flex; align-items: center; justify-content: center; background: rgb(0, 0, 0); position: relative; border-radius: 0px;" id="videoArea">
+        <div id="pmPlayerWrap" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><video src="blob:null/8318b68f-5d43-4cb5-9553-6994252f2262" style="max-width: 100%; max-height: 100%; object-fit: contain;"></video></div>
+      </div>
+      <!-- 字幕条 -->
+      <div id="subtitleBar" style="background:#fffdf9;padding:14px 28px;min-height:90px;display:flex;flex-direction:column;justify-content:center;border-top:2px solid #e8e0d0;">
+        <div id="subZh" style="font-size:20px;font-weight:700;color:#1a1a1a;line-height:1.5;margin-bottom:4px;"><span style="font-size:22px;font-weight:800;color:#c8860a;">比较忙</span> <span style="font-size:14px;color:#3a7bd5;font-style:italic;">bǐ jiào máng</span></div>
+        <div id="subEn" style="font-size:14px;color:#888;line-height:1.5;"><span style="font-size:15px;color:#555;">is quite busy.</span></div>
+      </div>
+      <!-- 控制栏 -->
+      <div style="background:#fffdf9;border-top:1px solid #e8e0d0;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button id="speedBtn" onclick="cycleSpeed()" style="background:#ede8df;border:none;border-radius:8px;padding:6px 12px;color:#555;font-size:13px;font-weight:700;cursor:pointer;min-width:48px;">1x</button>
+          <button onclick="toggleVideo()" style="background:#ede8df;border:none;border-radius:8px;padding:6px 12px;color:#555;font-size:12px;cursor:pointer;">🙈 Hide</button>
+          <!-- Attach video file button (admin only) -->
+          <button id="attachVideoBtn" onclick="attachVideoFile()" style="background: rgb(237, 232, 223); border: none; border-radius: 8px; padding: 6px 12px; color: rgb(85, 85, 85); font-size: 12px; cursor: pointer; display: inline-flex;">📎 Attach Video</button>
+          <input type="file" id="attachFileInput" accept="video/*" style="display:none" onchange="onAttachFile(this)">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button onclick="prevSentence()" style="background:#ede8df;border:none;border-radius:20px;padding:8px 18px;color:#555;font-size:13px;cursor:pointer;">⏮ Prev</button>
+          <button id="mainPlayBtn" onclick="togglePlay()" style="background:#3a7bd5;border:none;border-radius:50%;width:46px;height:46px;color:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(58,123,213,0.35);">▶</button>
+          <button onclick="nextSentence()" style="background:#ede8df;border:none;border-radius:20px;padding:8px 18px;color:#555;font-size:13px;cursor:pointer;">Next ⏭</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button id="loopBtn" onclick="toggleLoop()" style="background: rgb(237, 232, 223); border: none; border-radius: 8px; padding: 6px 12px; color: rgb(136, 136, 136); font-size: 12px; cursor: pointer;">🔁 Loop</button>
+          <button onclick="generateTranscript()" id="genBtn" style="background: linear-gradient(135deg, rgb(102, 126, 234), rgb(118, 75, 162)); border: none; border-radius: 8px; padding: 6px 16px; color: white; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: rgba(102, 126, 234, 0.4) 0px 2px 6px; display: inline-flex;">↻ Re-transcribe</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：文稿面板 -->
+    <div style="width:380px;flex-shrink:0;background:#fffdf9;border-left:1px solid #e8e0d0;display:flex;flex-direction:column;">
+      <div style="padding:14px 16px;border-bottom:1px solid #e8e0d0;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:#555;font-size:13px;font-weight:600;">📄 Full Transcript 完整文稿</span>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <span id="panelModeLabel" style="font-size:11px;color:#aaa;">Bilingual显示</span>
+          <button onclick="copyTranscript()" id="copyBtn" style="display: block; background: none; border: 1px solid rgb(216, 208, 192); border-radius: 6px; padding: 3px 10px; color: rgb(136, 136, 136); font-size: 11px; cursor: pointer;">Copy</button>
+        </div>
+      </div>
+      <div id="transcriptPanel" style="flex:1;overflow-y:auto;padding:12px 16px;">
+        <div id="transcriptSteps" style="display: none; flex-direction: column; gap: 8px; padding: 20px 0px;">
+    <div id="s0" style="font-size: 13px; color: rgb(76, 175, 80);">✅ Step 1: Audio ready (3.7 MB)</div>
+    <div id="s1" style="font-size: 13px; color: rgb(76, 175, 80);">✅ 第二步：识别完成，Total 183 characters recognized</div>
+    <div id="s2" style="font-size: 13px; color: rgb(76, 175, 80);">✅ Step 3: Translation complete!</div></div>
+        <div id="transcriptEmpty" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 200px; color: rgb(187, 187, 187); font-size: 13px; text-align: center; gap: 8px;">
+          <div style="font-size:32px;">🎙️</div>
+          <div style="color:#aaa;line-height:1.7;">
+            Click <strong style="color:#667eea;">✦ Transcribe</strong> to generate transcript<br>
+            <span style="font-size:11px;color:#bbb;">For YouTube videos: click 📎 Attach Video first<br>to load the local file for Whisper recognition</span>
+          </div>
+        </div>
+        <div id="sentenceList"><div class="sent-item" id="sent-0" onclick="jumpToSentence(0)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">今天vlog的内容呢</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">jīn tiān vlog de nèi róng ne</div><div class="sent-en" style="font-size:13px;color:#333;">Today's <span class="kw-orange">vlog</span> content is</div>
+      <div class="sent-time">1&nbsp;&nbsp;0:00 – 0:02
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(0)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(0)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-1" onclick="jumpToSentence(1)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">就会是我的日常星期天</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">jiù huì shì wǒ de rì cháng xīng qī tiān</div><div class="sent-en" style="font-size:13px;color:#333;">just my usual Sunday</div>
+      <div class="sent-time">2&nbsp;&nbsp;0:02 – 0:05
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(1)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(1)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-2" onclick="jumpToSentence(2)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">今天这个星期天呢</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">jīn tiān zhè ge xīng qī tiān ne</div><div class="sent-en" style="font-size:13px;color:#333;">This Sunday, though,</div>
+      <div class="sent-time">3&nbsp;&nbsp;0:05 – 0:06
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(2)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(2)">🔁</button>
+      </div>
+    </div><div class="sent-item active" id="sent-3" onclick="jumpToSentence(3)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">比较忙</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">bǐ jiào máng</div><div class="sent-en" style="font-size:13px;color:#333;">is quite busy.</div>
+      <div class="sent-time">4&nbsp;&nbsp;0:06 – 0:07
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(3)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(3)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-4" onclick="jumpToSentence(4)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">因为我下午</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">yīn wèi wǒ xià wǔ</div><div class="sent-en" style="font-size:13px;color:#333;">Because in the afternoon,</div>
+      <div class="sent-time">5&nbsp;&nbsp;0:07 – 0:09
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(4)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(4)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-5" onclick="jumpToSentence(5)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">有一个叫Engaging with Boston</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">yǒu yī gè jiào Engaging with Boston</div><div class="sent-en" style="font-size:13px;color:#333;">there's something called Engaging with Boston</div>
+      <div class="sent-time">6&nbsp;&nbsp;0:09 – 0:11
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(5)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(5)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-6" onclick="jumpToSentence(6)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">他们要求学生要去河边听jazz</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">tā men yāo qiú xué shēng yào qù hé biān tīng jazz</div><div class="sent-en" style="font-size:13px;color:#333;">where students are required to go by the river and listen to <span class="kw-green">jazz</span>.</div>
+      <div class="sent-time">7&nbsp;&nbsp;0:11 – 0:15
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(6)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(6)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-7" onclick="jumpToSentence(7)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">然后因为已经出门了嘛</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">rán hòu yīn wèi yǐ jīng chū mén le ma</div><div class="sent-en" style="font-size:13px;color:#333;">And since I'm already out,</div>
+      <div class="sent-time">8&nbsp;&nbsp;0:15 – 0:17
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(7)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(7)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-8" onclick="jumpToSentence(8)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">所以我就想说</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">suǒ yǐ wǒ jiù xiǎng shuō</div><div class="sent-en" style="font-size:13px;color:#333;">I thought,</div>
+      <div class="sent-time">9&nbsp;&nbsp;0:17 – 0:18
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(8)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(8)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-9" onclick="jumpToSentence(9)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">我可以去一直很想去的那个</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">wǒ kě yǐ qù yī zhí hěn xiǎng qù de nà ge</div><div class="sent-en" style="font-size:13px;color:#333;">I can go to the place I've always wanted to visit,</div>
+      <div class="sent-time">10&nbsp;&nbsp;0:18 – 0:21
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(9)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(9)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-10" onclick="jumpToSentence(10)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">Boston的Converse</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">Boston de Converse</div><div class="sent-en" style="font-size:13px;color:#333;">the Converse in Boston</div>
+      <div class="sent-time">11&nbsp;&nbsp;0:21 – 0:22
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(10)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(10)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-11" onclick="jumpToSentence(11)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">那家Converse呢</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">nà jiā Converse ne</div><div class="sent-en" style="font-size:13px;color:#333;">that Converse store</div>
+      <div class="sent-time">12&nbsp;&nbsp;0:22 – 0:23
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(11)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(11)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-12" onclick="jumpToSentence(12)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">就是可以定制自己想要的鞋子</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">jiù shì kě yǐ dìng zhì zì jǐ xiǎng yào de xié zi</div><div class="sent-en" style="font-size:13px;color:#333;">where you can customize your own shoes</div>
+      <div class="sent-time">13&nbsp;&nbsp;0:23 – 0:26
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(12)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(12)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-13" onclick="jumpToSentence(13)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">颜色什么的</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">yán sè shén me de</div><div class="sent-en" style="font-size:13px;color:#333;">and choose colors and stuff.</div>
+      <div class="sent-time">14&nbsp;&nbsp;0:26 – 0:28
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(13)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(13)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-14" onclick="jumpToSentence(14)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">通常呢早上起来就是</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">tōng cháng ne zǎo shàng qǐ lái jiù shì</div><div class="sent-en" style="font-size:13px;color:#333;">Usually, when I wake up in the morning,</div>
+      <div class="sent-time">15&nbsp;&nbsp;0:28 – 0:29
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(14)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(14)">🔁</button>
+      </div>
+    </div><div class="sent-item" id="sent-15" onclick="jumpToSentence(15)">
+      <div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">会在床上赖一下子</div><div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">huì zài chuáng shàng lài yī xià zi</div><div class="sent-en" style="font-size:13px;color:#333;">I just lounge in bed for a bit</div>
+      <div class="sent-time">16&nbsp;&nbsp;0:29 – 0:31
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(15)">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(15)">🔁</button>
+      </div>
+    </div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.mode-btn {
+  background: none; border: none; color: #999; font-size: 13px; font-weight: 600;
+  padding: 5px 12px; border-radius: 7px; cursor: pointer; font-family: inherit; transition: all 0.15s;
+}
+.mode-btn.active { background: #3a7bd5; color: white; }
+.mode-btn:hover:not(.active) { background: #d8d2c8; color: #555; }
+.sent-item {
+  padding: 12px 10px; border-radius: 10px; cursor: pointer; margin-bottom: 8px;
+  border-left: 3px solid transparent; transition: all 0.15s;
+}
+.sent-item:hover { background: #f0ece4; }
+.sent-item.active { background: #e8f0fc; border-left-color: #3a7bd5; }
+.sent-en { font-size: 13px; color: #888; line-height: 1.6; }
+.sent-zh { font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 1.5; margin-bottom: 3px; }
+.sent-time { font-size: 11px; color: #ccc; margin-top:4px; }
+.sent-play-btn { background:#ede8df; border:none; border-radius:5px; padding:3px 8px; color:#888; font-size:11px; cursor:pointer; }
+.sent-play-btn:hover { background:#d8d2c8; }
+.kw-orange { color: #d4600a; font-weight: 600; }
+.kw-green  { color: #2a8a2a; font-weight: 600; }
+#transcriptPanel::-webkit-scrollbar { width: 4px; }
+#transcriptPanel::-webkit-scrollbar-track { background: transparent; }
+#transcriptPanel::-webkit-scrollbar-thumb { background: #d8d0c0; border-radius: 4px; }
+.admin-card-tools {
+  position: absolute; top: 6px; left: 6px; z-index: 10;
+  display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s;
+}
+.video-card:hover .admin-card-tools { opacity: 1; }
+.admin-card-tools button {
+  background: rgba(255,255,255,0.92); border: none; border-radius: 6px;
+  width: 28px; height: 28px; font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15); transition: transform 0.1s;
+}
+.admin-card-tools button:hover { transform: scale(1.15); }
+</style>
+
+<!-- ─── Edit Card Modal (Admin) ─── -->
+<div class="modal-bg" id="editModal" style="display: none; align-items: center; justify-content: center;">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <div><div class="modal-title" id="editModalTitle">Edit · Ep.1 · @李明Ming</div></div>
+      <button class="modal-close" onclick="closeEditModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="form-row">
+          <div class="form-label">Creator Name</div>
+          <input class="form-input" id="editCreator" placeholder="@username">
+        </div>
+        <div class="form-row-2col">
+          <div class="form-row">
+            <div class="form-label">Level</div>
+            <select class="form-select" id="editLevel">
+              <option value="入门">Beginner</option>
+              <option value="初级">Elementary</option>
+              <option value="中级">Intermediate</option>
+              <option value="高级">Advanced</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-label">Gender</div>
+            <select class="form-select" id="editGender">
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-label">Topics (comma-separated)</div>
+          <input class="form-input" id="editTags" placeholder="daily, travel, food...">
+        </div>
+        <div class="form-row">
+          <div class="form-label">Accent</div>
+          <select class="form-select" id="editAccent">
+            <option value="普通话">Mandarin</option>
+            <option value="台湾腔">Taiwanese</option>
+            <option value="粤语">Cantonese</option>
+            <option value="四川话">Sichuanese</option>
+            <option value="上海话">Shanghainese</option>
+            <option value="东北话">Northeastern</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:space-between;padding-top:4px;">
+          <button onclick="deleteCardFromEdit()" style="background:#fde8e8;color:#b82727;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">🗑️ Delete Episode</button>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+            <button class="btn-primary" onclick="saveEditCard()">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Invite Code Modal ─── -->
+<div class="modal-bg" id="inviteModal" style="display: none; align-items: center; justify-content: center;">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-body" style="padding:36px 32px 28px;text-align:center;">
+      <div style="font-size:44px;margin-bottom:12px;">🔐</div>
+      <h2 style="font-size:20px;font-weight:800;color:#1a1a1a;margin-bottom:6px;">Admin Access</h2>
+      <p style="font-size:13px;color:#aaa;margin-bottom:24px;">Enter the invite code to unlock admin features<br><span style="font-size:12px;color:#ccc;">输入邀请码以解锁管理功能</span></p>
+      <input id="inviteInput" type="password" placeholder="Enter invite code · 输入邀请码" style="width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 14px;font-size:14px;outline:none;font-family:inherit;margin-bottom:10px;text-align:center;letter-spacing:3px;" onkeydown="if(event.key===&#39;Enter&#39;)checkInvite()">
+      <div id="inviteError" style="font-size: 12px; color: rgb(238, 0, 85); margin-bottom: 10px; display: block;">Incorrect code. Try again. · 邀请码错误</div>
+      <button onclick="checkInvite()" style="width:100%;background:#1a1a1a;color:white;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;">Unlock · 解锁</button>
+      <button onclick="closeInviteModal()" style="width:100%;background:none;color:#aaa;border:none;font-size:13px;cursor:pointer;font-family:inherit;">Cancel · 取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Entry Gate Modal ─── -->
+<div id="entryGate" style="position: fixed; inset: 0px; background: rgb(245, 240, 232); z-index: 2000; display: none; align-items: center; justify-content: center;">
+  <div style="background:white;border-radius:24px;padding:40px 36px;max-width:420px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.12);text-align:center;">
+    <div style="font-size:52px;margin-bottom:16px;">🎙️</div>
+    <h1 style="font-size:26px;font-weight:900;color:#1a1a1a;margin-bottom:6px;font-family:Georgia,serif;">SpeakReal</h1>
+    <p style="font-size:13px;color:#aaa;letter-spacing:1px;text-transform:uppercase;margin-bottom:28px;">Authentic Mandarin from Real Life</p>
+    <div style="background:#f8f8f8;border-radius:14px;padding:20px;margin-bottom:24px;text-align:left;">
+      <div style="font-size:12px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Enter your invite code</div>
+      <input id="entryCodeInput" type="password" placeholder="••••••••" style="width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 16px;font-size:18px;outline:none;font-family:monospace;text-align:center;letter-spacing:6px;margin-bottom:8px;transition:border-color 0.2s;" onkeydown="if(event.key===&#39;Enter&#39;)checkEntryCode()" onfocus="this.style.borderColor=&#39;#3a7bd5&#39;" onblur="this.style.borderColor=&#39;#e0e0e0&#39;">
+      <div id="entryError" style="font-size:12px;color:#e05;text-align:center;margin-top:4px;display:none;">
+        Incorrect code. Please try again.
+      </div>
+    </div>
+    <button onclick="checkEntryCode()" style="width:100%;background:#1a1a1a;color:white;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background=&#39;#333&#39;" onmouseout="this.style.background=&#39;#1a1a1a&#39;">
+      Enter →
+    </button>
+    <p style="font-size:11px;color:#ccc;margin-top:16px;">Don't have a code? Contact the site owner.</p>
+  </div>
+</div>
+
+<!-- ─── 上传视频 Modal ─── -->
+<div class="modal-bg" id="uploadModal">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Add New Video 添加视频</div>
+        <div class="modal-sub">Upload a local video or paste a link</div>
+      </div>
+      <button class="modal-close" onclick="closeUploadModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="upload-modal-form">
+        <!-- 拖拽上传区 -->
+        <div class="form-row">
+          <div class="drop-zone" id="dropZone" onclick="document.getElementById(&#39;fileInput&#39;).click()">
+            <div class="dz-icon">📁</div>
+            <div class="dz-text">Drag &amp; drop video here, or click to select</div>
+            <div class="dz-sub">Supports MP4, MOV, WebM · Max ~500MB recommended</div>
+          </div>
+          <input type="file" id="fileInput" accept="video/*" style="display:none" onchange="handleFileSelect(this)">
+          <div id="fileSelectedWrap" style="display:none;"></div>
+        </div>
+
+        <!-- 视频链接 -->
+        <div class="form-row">
+          <div class="form-label">Or paste a video URL (optional)</div>
+          <input class="form-input" type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=... (Unlisted OK)">
+        </div>
+
+        <!-- 基本信息 -->
+        <div class="form-row-2col">
+          <div class="form-row">
+            <div class="form-label">Creator Name 创作者</div>
+            <input class="form-input" id="inputCreator" placeholder="@username">
+          </div>
+          <div class="form-row">
+            <div class="form-label">Accent / Dialect 口音</div>
+            <select class="form-select" id="inputAccent">
+              <option value="普通话">Mandarin 普通话</option>
+              <option value="台湾腔">Taiwanese 台湾腔</option>
+              <option value="粤语">Cantonese 粤语</option>
+              <option value="四川话">Sichuanese 四川话</option>
+              <option value="上海话">Shanghainese 上海话</option>
+              <option value="东北话">Northeastern 东北话</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2col">
+          <div class="form-row">
+            <div class="form-label">Level 难度</div>
+            <select class="form-select" id="inputLevel">
+              <option value="入门">Beginner 入门</option>
+              <option value="初级" selected="">Elementary 初级</option>
+              <option value="中级">Intermediate 中级</option>
+              <option value="高级">Advanced 高级</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-label">Gender 性别</div>
+            <select class="form-select" id="inputGender">
+              <option value="female">Female 女</option>
+              <option value="male">Male 男</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-label">Topics (comma-separated) 主题标签</div>
+          <input class="form-input" id="inputTags" placeholder="daily, travel, food...">
+        </div>
+
+        <!-- 进度条 -->
+        <div class="upload-progress" id="uploadProgress">
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+          <div class="progress-label" id="progressLabel">Preparing...</div>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:4px;">
+          <button class="btn-secondary" onclick="closeUploadModal()">Cancel</button>
+          <button class="btn-primary" onclick="submitUpload()">✓ Add Video</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── 数据 ───
+const VIDEOS = [
+  {id:1,dur:'1:32',creator:'@李明Ming',flag:'🇨🇳',tags:['日常','生活'],accent:'普通话',level:'初级',gender:'male',t:'t1',src:null,transcript:null},
+  {id:2,dur:'2:15',creator:'@小雅Xiao',flag:'🇨🇳',tags:['旅行','文化'],accent:'台湾腔',level:'中级',gender:'female',t:'t2',src:null,transcript:null},
+  {id:3,dur:'1:45',creator:'@阿强Aqiang',flag:'🇨🇳',tags:['美食','烹饪'],accent:'粤语',level:'中级',gender:'male',t:'t3',src:null,transcript:null},
+  {id:4,dur:'3:02',creator:'@思思Sisi',flag:'🇨🇳',tags:['情感','成长'],accent:'普通话',level:'高级',gender:'female',t:'t4',src:null,transcript:null},
+  {id:5,dur:'1:18',creator:'@文哥Wenge',flag:'🇨🇳',tags:['科技','数码'],accent:'东北话',level:'初级',gender:'male',t:'t5',src:null,transcript:null},
+  {id:6,dur:'2:40',creator:'@嘉嘉Jiajia',flag:'🇨🇳',tags:['时尚','购物'],accent:'台湾腔',level:'初级',gender:'female',t:'t6',src:null,transcript:null},
+  {id:7,dur:'1:55',creator:'@大壮Dazhuang',flag:'🇨🇳',tags:['运动','户外'],accent:'普通话',level:'入门',gender:'male',t:'t7',src:null,transcript:null},
+  {id:8,dur:'2:28',creator:'@晓燕Xiaoyan',flag:'🇨🇳',tags:['宠物','日常'],accent:'普通话',level:'初级',gender:'female',t:'t8',src:null,transcript:null},
+  {id:9,dur:'1:10',creator:'@阿明Aming',flag:'🇨🇳',tags:['美食','生活'],accent:'四川话',level:'入门',gender:'male',t:'t1',src:null,transcript:null},
+  {id:10,dur:'3:30',creator:'@悦悦Yueyue',flag:'🇨🇳',tags:['音乐','创作'],accent:'普通话',level:'高级',gender:'female',t:'t2',src:null,transcript:null},
+  {id:11,dur:'2:05',creator:'@浩然Haoran',flag:'🇨🇳',tags:['职场','商务'],accent:'普通话',level:'中级',gender:'male',t:'t3',src:null,transcript:null},
+  {id:12,dur:'1:42',creator:'@小莹Xiaoying',flag:'🇨🇳',tags:['健康','生活'],accent:'台湾腔',level:'初级',gender:'female',t:'t4',src:null,transcript:null},
+  {id:13,dur:'2:55',creator:'@大牛Daniu',flag:'🇨🇳',tags:['旅行','户外'],accent:'东北话',level:'中级',gender:'male',t:'t5',src:null,transcript:null},
+  {id:14,dur:'1:38',creator:'@璐璐Lulu',flag:'🇨🇳',tags:['家居','生活'],accent:'上海话',level:'初级',gender:'female',t:'t6',src:null,transcript:null},
+  {id:15,dur:'2:12',creator:'@子轩Zixuan',flag:'🇨🇳',tags:['学习','阅读'],accent:'普通话',level:'中级',gender:'male',t:'t7',src:null,transcript:null},
+  {id:16,dur:'1:50',creator:'@彩虹Caihong',flag:'🇨🇳',tags:['摄影','创作'],accent:'普通话',level:'初级',gender:'female',t:'t8',src:null,transcript:null},
+  {id:17,dur:'3:15',creator:'@老吴Laowu',flag:'🇨🇳',tags:['文化','历史'],accent:'普通话',level:'高级',gender:'male',t:'t1',src:null,transcript:null},
+  {id:18,dur:'1:25',creator:'@萌萌Mengmeng',flag:'🇨🇳',tags:['娱乐','综艺'],accent:'台湾腔',level:'入门',gender:'female',t:'t2',src:null,transcript:null},
+  {id:19,dur:'2:35',creator:'@志远Zhiyuan',flag:'🇨🇳',tags:['科技','游戏'],accent:'普通话',level:'中级',gender:'male',t:'t3',src:null,transcript:null},
+  {id:20,dur:'1:48',creator:'@佳佳Jiajia',flag:'🇨🇳',tags:['情感','心理'],accent:'普通话',level:'中级',gender:'female',t:'t4',src:null,transcript:null},
+];
+
+const THEMES = ['t1','t2','t3','t4','t5','t6','t7','t8'];
+let nextId = 21;
+let saved = new Set();
+let filters = {accent:'all', gender:'all', topic:'all', level:null};
+let currentVideoId = null;
+let selectedFile = null;
+
+// ─── 工具函数 ───
+function durToSecs(d){const p=d.split(':');return parseInt(p[0])*60+parseInt(p[1]);}
+function levelColor(l){
+  const m={入门:['#e8fde8','#2a8a2a'],初级:['#e8f4fd','#2776b8'],中级:['#fff4e0','#b87400'],高级:['#fde8e8','#b82727']};
+  return m[l]||['#f2f2f2','#666'];
+}
+
+// ─── 渲染卡片 ───
+function renderCards(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const sort = document.getElementById('sortSel').value;
+  let items = VIDEOS.filter(v=>{
+    if(filters.accent!=='all'&&v.accent!==filters.accent) return false;
+    if(filters.gender!=='all'&&v.gender!==filters.gender) return false;
+    if(filters.topic!=='all'&&!v.tags.includes(filters.topic)) return false;
+    if(filters.level&&v.level!==filters.level) return false;
+    if(q&&!v.creator.toLowerCase().includes(q)&&!v.tags.join('').includes(q)&&!v.accent.includes(q)) return false;
+    return true;
+  });
+  if(sort==='desc') items=[...items].reverse();
+  else if(sort==='short') items=[...items].sort((a,b)=>durToSecs(a.dur)-durToSecs(b.dur));
+  else if(sort==='long') items=[...items].sort((a,b)=>durToSecs(b.dur)-durToSecs(a.dur));
+  else if(sort==='rand') items=[...items].sort(()=>Math.random()-0.5);
+
+  document.getElementById('resultInfo').textContent = 'Total '+VIDEOS.length+' eps · Showing '+items.length+'  eps';
+  document.getElementById('totalCount').textContent = VIDEOS.length;
+  const [bg,fg] = levelColor('入门'); // just init
+
+  document.getElementById('cardsGrid').innerHTML = items.map(v=>{
+    const [lbg,lfg]=levelColor(v.level);
+    const isUser = !!v.userUploaded;
+    const levelLabel = {入门:'Beginner',初级:'Elementary',中级:'Intermediate',高级:'Advanced'}[v.level]||v.level;
+    const adminTools = isAdmin ? `<div class="admin-card-tools"><button onclick="event.stopPropagation();editCard(${v.id})" title="Edit">✏️</button><button onclick="event.stopPropagation();deleteCard(${v.id})" title="Delete">🗑️</button></div>` : '';
+    return `
+    <div class="video-card${isUser?' user-upload':''}" onclick="openCard(${v.id})" style="position:relative;">
+      ${adminTools}
+      <div class="thumb ${v.t}">
+        ${(()=>{
+          const yid = getYouTubeId ? getYouTubeId(v.src) : null;
+          if(yid) return `<img class="thumb-video" src="https://img.youtube.com/vi/${yid}/mqdefault.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;"><div class="thumb-overlay"></div>`;
+          if(v.src) return `<video class="thumb-video" src="${v.src}" muted preload="metadata" onmouseover="this.play()" onmouseout="this.pause();this.currentTime=0"></video><div class="thumb-overlay"></div>`;
+          return '';
+        })()}
+        <div class="play-overlay"><div class="play-circle"></div></div>
+        <div class="thumb-top">
+          <span class="dur">${v.dur}</span>
+          <button class="bm-btn" title="Save" onclick="toggleSave(event,${v.id})" id="bm${v.id}">${saved.has(v.id)?'★':'☆'}</button>
+        </div>
+        <div class="thumb-bottom">
+          ${isUser?'<span class="user-upload-badge">Mine</span>':''}
+          <span class="c-name">${v.creator}</span>
+          <span class="c-flag">${v.flag}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ep-row">
+          <span class="ep-num">Ep.${v.id}</span>
+          <span style="font-size:11px;padding:2px 7px;border-radius:10px;background:${lbg};color:${lfg}">${levelLabel}</span>
+        </div>
+        <div class="c-tags">${v.tags.map(t=>`<span class="c-tag">${t}</span>`).join('')}</div>
+        <div class="c-accent">Accent: ${v.accent}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── 收藏 ───
+function toggleSave(e,id){
+  e.stopPropagation();
+  if(saved.has(id)) saved.delete(id); else saved.add(id);
+  document.getElementById('savedCount') && (document.getElementById('savedCount').textContent=saved.size);
+  renderSavedList();
+  renderCards();
+}
+
+function renderSavedList(){
+  const box = document.getElementById('savedBox');
+  const list = document.getElementById('savedList');
+  const badge = document.getElementById('savedCountBadge');
+  if(saved.size === 0){ box.style.display='none'; return; }
+  box.style.display = 'block';
+  badge.textContent = saved.size;
+  list.innerHTML = [...saved].map(id=>{
+    const v = VIDEOS.find(x=>x.id===id);
+    if(!v) return '';
+    const [lbg,lfg] = levelColor(v.level);
+    return `<div onclick="openCard(${v.id})" style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#f9f9f7;border-radius:8px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#f0ece4'" onmouseout="this.style.background='#f9f9f7'">
+      <div style="width:32px;height:32px;border-radius:6px;background:${v.t==='t1'?'linear-gradient(135deg,#f093fb,#f5576c)':v.t==='t2'?'linear-gradient(135deg,#4facfe,#00f2fe)':v.t==='t3'?'linear-gradient(135deg,#43e97b,#38f9d7)':v.t==='t4'?'linear-gradient(135deg,#fa709a,#fee140)':v.t==='t5'?'linear-gradient(135deg,#a18cd1,#fbc2eb)':v.t==='t6'?'linear-gradient(135deg,#ffecd2,#fcb69f)':v.t==='t7'?'linear-gradient(135deg,#96fbc4,#f9f586)':'linear-gradient(135deg,#667eea,#764ba2)'};flex-shrink:0;"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:12px;font-weight:700;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Ep.${v.id} · ${v.creator}</div>
+        <div style="font-size:10px;color:#aaa;">${v.tags.slice(0,2).join(', ')}</div>
+      </div>
+      <button onclick="event.stopPropagation();saved.delete(${id});renderSavedList();renderCards();" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:14px;padding:0;">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ─── YouTube helpers ───
+function getYouTubeId(url){
+  if(!url) return null;
+  const patterns = [
+    /youtube\.com\/watch\?v=([^&]+)/,
+    /youtu\.be\/([^?&]+)/,
+    /youtube\.com\/embed\/([^?&]+)/,
+    /youtube\.com\/shorts\/([^?&]+)/
+  ];
+  for(const p of patterns){
+    const m = url.match(p);
+    if(m) return m[1];
+  }
+  return null;
+}
+
+let ytPlayerObj = null;
+function initYTPlayer(){
+  const iframe = document.getElementById('ytPlayer');
+  if(!iframe || !window.YT) return;
+  ytPlayerObj = new YT.Player('ytPlayer', {
+    events: {
+      onStateChange(e){
+        const btn = document.getElementById('mainPlayBtn');
+        if(e.data === YT.PlayerState.PLAYING){ btn.textContent='⏸'; startYTTimetrack(); }
+        else if(e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED){ btn.textContent='▶'; }
+      }
+    }
+  });
+}
+
+let ytInterval = null;
+function startYTTimetrack(){
+  clearInterval(ytInterval);
+  ytInterval = setInterval(()=>{
+    if(!ytPlayerObj || typeof ytPlayerObj.getCurrentTime !== 'function') return;
+    const t = ytPlayerObj.getCurrentTime();
+    // Find current sentence
+    if(currentSentences.length === 0) return;
+    let found = -1;
+    for(let i=0;i<currentSentences.length;i++){
+      const s = currentSentences[i];
+      if(s.start!=null && s.end!=null && t>=s.start && t<s.end){ found=i; break; }
+    }
+    if(found !== currentSentIdx){
+      currentSentIdx = found;
+      updateSubtitle(found);
+      if(found>=0) highlightSentence(found);
+    }
+    // Loop mode
+    if(loopMode && currentSentIdx>=0){
+      const s = currentSentences[currentSentIdx];
+      if(s.end!=null && t >= s.end-0.1){ ytPlayerObj.seekTo(s.start, true); }
+    }
+  }, 300);
+}
+
+// ─── 播放器状态 ───
+let playerVideo = null;
+let currentSentences = []; // [{zh, en, pinyin, start, end}]
+let currentSentIdx = -1;
+let loopMode = false;
+let currentMode = 'bilingual';
+let videoHidden = false;
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
+let speedIdx = 2;
+
+// ─── 打开播放器 ───
+function openCard(id){
+  currentVideoId = id;
+  const v = VIDEOS.find(x=>x.id===id);
+
+  document.getElementById('pmTitle').textContent = 'Ep. '+v.id+'  eps · '+v.creator;
+  document.getElementById('pmSub').textContent = v.accent+' · '+v.level+' · '+v.tags.join(' ');
+
+  // 恢复 API Key 显示
+  if(OPENAI_KEY) document.getElementById('apiKeyInput').value = OPENAI_KEY;
+
+  // 视频播放器
+  const pw = document.getElementById('pmPlayerWrap');
+  playerVideo = null;
+
+  const ytId = getYouTubeId(v.src);
+
+  if(ytId){
+    // YouTube embed — show thumbnail first
+    pw.innerHTML = `<img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6;">
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+        <div style="width:64px;height:64px;background:rgba(255,0,0,0.9);border-radius:14px;display:flex;align-items:center;justify-content:center;">
+          <span style="color:white;font-size:28px;margin-left:4px;">▶</span>
+        </div>
+      </div>`;
+    pw.innerHTML = ''; // clear immediately for iframe
+    const iframe = document.createElement('iframe');
+    iframe.id = 'ytPlayer';
+    iframe.style.cssText = 'width:100%;height:100%;border:none;position:absolute;inset:0;';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.src = `https://www.youtube.com/embed/${ytId}?enablejsapi=1&rel=0&modestbranding=1&origin=${encodeURIComponent(location.origin||'file://')}&playsinline=1`;
+    pw.appendChild(iframe);
+
+    // Load YouTube IFrame API for JS control
+    if(!window.YT){
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    }
+    window.onYouTubeIframeAPIReady = initYTPlayer;
+    if(window.YT && window.YT.Player) initYTPlayer();
+
+  } else if(v.src && v.src.startsWith('blob:')){
+    // Local blob file
+    pw.innerHTML = '';
+    playerVideo = document.createElement('video');
+    playerVideo.src = v.src;
+    playerVideo.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;';
+    playerVideo.addEventListener('timeupdate', onTimeUpdate);
+    playerVideo.addEventListener('play', ()=>document.getElementById('mainPlayBtn').textContent='⏸');
+    playerVideo.addEventListener('pause', ()=>document.getElementById('mainPlayBtn').textContent='▶');
+    playerVideo.addEventListener('ended', onVideoEnded);
+    pw.appendChild(playerVideo);
+
+  } else {
+    // No video
+    playerVideo = null;
+    const hasTranscript = v._sentences && v._sentences.length > 0;
+    pw.innerHTML = `<div style="text-align:center;color:#888;padding:30px;">
+      <div style="font-size:44px;margin-bottom:12px;">🎬</div>
+      <div style="font-size:14px;font-weight:600;color:#666;margin-bottom:6px;">${v.srcName ? v.srcName : 'No video attached'}</div>
+      <div style="font-size:12px;color:#aaa;">Paste a YouTube link when adding the video<br>to make it playable for all users.</div>
+      ${hasTranscript ? '<div style="margin-top:12px;font-size:12px;color:#2a8a2a;">✓ Transcript is saved and ready</div>' : ''}
+    </div>`;
+  }
+
+  // 恢复文稿
+  currentSentences = v._sentences || [];
+  kwMap = {};
+  renderSentenceList();
+  updateSubtitle(-1);
+
+  // 重置控件
+  loopMode = false;
+  speedIdx = 2;
+  document.getElementById('loopBtn').style.color = '#888';
+  document.getElementById('speedBtn').textContent = '1x';
+  document.getElementById('mainPlayBtn').textContent = '▶';
+  setMode('bilingual');
+
+  // Admin controls visibility
+  document.getElementById('attachVideoBtn').style.display = isAdmin ? 'inline-flex' : 'none';
+  document.getElementById('genBtn').style.display = isAdmin ? 'inline-flex' : 'none';
+  document.getElementById('apiKeyZone').style.display = isAdmin ? 'flex' : 'none';
+
+  document.getElementById('playerModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetailModal(){
+  if(playerVideo){ playerVideo.pause(); playerVideo = null; }
+  if(ytPlayerObj){ try{ ytPlayerObj.stopVideo(); }catch(e){} ytPlayerObj = null; }
+  clearInterval(ytInterval);
+  document.getElementById('playerModal').style.display = 'none';
+  document.body.style.overflow = '';
+  currentVideoId = null;
+}
+
+// ─── 播放控制 ───
+function togglePlay(){
+  if(playerVideo){ playerVideo.paused ? playerVideo.play() : playerVideo.pause(); return; }
+  if(ytPlayerObj && ytPlayerObj.getPlayerState){
+    const state = ytPlayerObj.getPlayerState();
+    if(state === YT.PlayerState.PLAYING) ytPlayerObj.pauseVideo();
+    else ytPlayerObj.playVideo();
+  }
+}
+
+function cycleSpeed(){
+  speedIdx = (speedIdx+1)%SPEEDS.length;
+  if(playerVideo) playerVideo.playbackRate = SPEEDS[speedIdx];
+  if(ytPlayerObj && ytPlayerObj.setPlaybackRate) ytPlayerObj.setPlaybackRate(SPEEDS[speedIdx]);
+  document.getElementById('speedBtn').textContent = SPEEDS[speedIdx]+'x';
+}
+
+function toggleLoop(){
+  loopMode = !loopMode;
+  document.getElementById('loopBtn').style.color = loopMode ? '#3a7bd5' : '#888';
+}
+
+function toggleVideo(){
+  videoHidden = !videoHidden;
+  document.getElementById('videoArea').style.display = videoHidden ? 'none' : '';
+}
+
+function prevSentence(){
+  if(currentSentences.length===0) return;
+  const idx = Math.max(0, currentSentIdx-1);
+  jumpToSentence(idx);
+}
+
+function nextSentence(){
+  if(currentSentences.length===0) return;
+  const idx = Math.min(currentSentences.length-1, currentSentIdx+1);
+  jumpToSentence(idx);
+}
+
+function jumpToSentence(idx){
+  if(idx<0 || idx>=currentSentences.length) return;
+  const s = currentSentences[idx];
+  if(playerVideo){
+    if(s.start != null) playerVideo.currentTime = s.start;
+    playerVideo.play();
+  } else if(ytPlayerObj && ytPlayerObj.seekTo){
+    if(s.start != null) ytPlayerObj.seekTo(s.start, true);
+    ytPlayerObj.playVideo();
+    startYTTimetrack();
+  }
+  currentSentIdx = idx;
+  updateSubtitle(idx);
+  highlightSentence(idx);
+}
+
+function onTimeUpdate(){
+  if(!playerVideo || currentSentences.length===0) return;
+  const t = playerVideo.currentTime;
+  let found = -1;
+  for(let i=0;i<currentSentences.length;i++){
+    const s = currentSentences[i];
+    if(s.start!=null && s.end!=null && t>=s.start && t<s.end){ found=i; break; }
+  }
+  if(found !== currentSentIdx){
+    currentSentIdx = found;
+    updateSubtitle(found);
+    if(found>=0) highlightSentence(found);
+  }
+  // 单句循环
+  if(loopMode && currentSentIdx>=0){
+    const s = currentSentences[currentSentIdx];
+    if(s.end!=null && t >= s.end-0.05){ playerVideo.currentTime = s.start; }
+  }
+}
+
+function onVideoEnded(){
+  document.getElementById('mainPlayBtn').textContent = '▶';
+}
+
+function updateSubtitle(idx){
+  const zhEl = document.getElementById('subZh');
+  const enEl = document.getElementById('subEn');
+  if(idx<0 || !currentSentences[idx]){
+    zhEl.innerHTML = ''; enEl.innerHTML = ''; return;
+  }
+  const s = currentSentences[idx];
+  if(currentMode==='en'){
+    zhEl.innerHTML = '';
+    enEl.innerHTML = `<span style="font-size:18px;font-weight:600;color:#1a1a1a;">${highlightKeywords(s.en||'')}</span>`;
+  } else if(currentMode==='zh'){
+    zhEl.innerHTML = `<span style="font-size:22px;font-weight:800;color:#c8860a;">${s.zh||''}</span>`;
+    enEl.innerHTML = s.pinyin ? `<span style="font-size:14px;color:#3a7bd5;font-style:italic;">${s.pinyin}</span>` : '';
+  } else {
+    zhEl.innerHTML = `<span style="font-size:22px;font-weight:800;color:#c8860a;">${s.zh||''}</span>`
+      + (s.pinyin ? `&ensp;<span style="font-size:14px;color:#3a7bd5;font-style:italic;">${s.pinyin}</span>` : '');
+    enEl.innerHTML = `<span style="font-size:15px;color:#555;">${highlightKeywords(s.en||'')}</span>`;
+  }
+}
+
+function highlightSentence(idx){
+  document.querySelectorAll('.sent-item').forEach((el,i)=>{
+    el.classList.toggle('active', i===idx);
+    if(i===idx) el.scrollIntoView({block:'nearest',behavior:'smooth'});
+  });
+}
+
+// ─── 关键词高亮 ───
+const KW_COLORS = ['kw-orange','kw-green'];
+let kwMap = {};
+function highlightKeywords(text){
+  let out = text;
+  Object.keys(kwMap).forEach((w,i)=>{
+    const cls = KW_COLORS[i%2];
+    out = out.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),
+      `<span class="${cls}">$&</span>`);
+  });
+  return out;
+}
+
+function renderSentenceList(){
+  const list = document.getElementById('sentenceList');
+  const empty = document.getElementById('transcriptEmpty');
+  const copyBtn = document.getElementById('copyBtn');
+
+  if(currentSentences.length===0){
+    list.innerHTML=''; empty.style.display='flex'; copyBtn.style.display='none'; return;
+  }
+  empty.style.display='none'; copyBtn.style.display='block';
+
+  list.innerHTML = currentSentences.map((s,i)=>{
+    const timeStr = s.start!=null ? fmtTime(s.start)+' – '+fmtTime(s.end) : '';
+    let zhHtml = s.zh||'';
+    let pinyinHtml = s.pinyin ? `<div style="font-size:11px;color:#555;font-style:italic;margin-bottom:3px;">${s.pinyin}</div>` : '';
+    let enHtml = highlightKeywords(s.en||'');
+
+    // 顺序：Chinese → 拼音 → English
+    let zhPart='', pinPart='', enPart='', notePart='';
+    if(currentMode==='bilingual'){
+      zhPart  = `<div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">${zhHtml}</div>`;
+      pinPart = s.pinyin ? `<div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">${s.pinyin}</div>` : '';
+      enPart  = `<div class="sent-en" style="font-size:13px;color:#333;">${enHtml}</div>`;
+    } else if(currentMode==='zh'){
+      zhPart  = `<div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">${zhHtml}</div>`;
+      pinPart = s.pinyin ? `<div style="font-size:12px;color:#3a7bd5;font-style:italic;margin-bottom:4px;">${s.pinyin}</div>` : '';
+    } else if(currentMode==='en'){
+      enPart  = `<div class="sent-en" style="font-size:15px;color:#333;">${enHtml}</div>`;
+    } else if(currentMode==='dictation'){
+      zhPart  = `<div class="sent-zh" style="font-size:16px;font-weight:700;filter:blur(5px);user-select:none;color:#c8860a;">${zhHtml}</div>`;
+      enPart  = `<div class="sent-en" style="font-size:13px;filter:blur(5px);user-select:none;color:#333;">${enHtml}</div>`;
+    } else if(currentMode==='blank'){
+      zhPart  = `<div class="sent-zh" style="font-size:16px;font-weight:700;color:#c8860a;margin-bottom:3px;">${blankWords(zhHtml)}</div>`;
+      enPart  = `<div class="sent-en" style="font-size:13px;color:#333;">${enHtml}</div>`;
+    }
+    if(s.note) notePart = `<div style="font-size:11px;color:#4a6a4a;margin-top:3px;">💡 ${s.note}</div>`;
+
+    return `<div class="sent-item" id="sent-${i}" onclick="jumpToSentence(${i})">
+      ${zhPart}${pinPart}${enPart}${notePart}
+      <div class="sent-time">${i+1}&nbsp;&nbsp;${timeStr}
+        <button class="sent-play-btn" onclick="event.stopPropagation();jumpToSentence(${i})">▶</button>
+        <button class="sent-play-btn" onclick="event.stopPropagation();toggleSentLoop(${i})">🔁</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function blankWords(html){
+  return html.replace(/<span[^>]*>([^<]+)<\/span>/g,'<span style="background:#3a3d4a;color:transparent;border-radius:3px;padding:0 2px;">$1</span>')
+    .replace(/\b([A-Za-z]{4,})\b/g,(m,p,o,s)=>Math.random()<0.35?`<span style="background:#3a3d4a;color:transparent;border-radius:3px;">${m}</span>`:m);
+}
+
+function toggleSentLoop(idx){
+  jumpToSentence(idx);
+  loopMode=true;
+  document.getElementById('loopBtn').style.color='#3a7bd5';
+}
+
+function fmtTime(s){ return s==null?'':Math.floor(s/60)+':'+(Math.floor(s%60)).toString().padStart(2,'0'); }
+
+// ─── 模式切换 ───
+function setMode(mode){
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+  document.getElementById('panelModeLabel').textContent =
+    {bilingual:'Bilingual显示',zh:'Chinese',en:'English',dictation:'Dictation模式',blank:'Fill-in练习'}[mode]||'';
+  updateSubtitle(currentSentIdx);
+  renderSentenceList();
+}
+
+
+
+// ─── Entry gate ───
+// Set your USER invite code and ADMIN code below
+const USER_CODE  = 'speakreal2026';   // change this — given to your learners
+// ADMIN_CODE is defined below
+
+function checkEntryCode(){
+  const val = document.getElementById('entryCodeInput').value.trim();
+  if(val === ADMIN_CODE){
+    // Admin enters — unlock everything
+    document.getElementById('entryGate').style.display = 'none';
+    localStorage.setItem('sr_access','admin');
+    isAdmin = true;
+    enableAdminMode();
+    showAdminToast('Admin mode unlocked 🔓');
+  } else if(val === USER_CODE){
+    // Normal user enters
+    document.getElementById('entryGate').style.display = 'none';
+    localStorage.setItem('sr_access','user');
+  } else {
+    const err = document.getElementById('entryError');
+    err.style.display = 'block';
+    document.getElementById('entryCodeInput').value = '';
+    document.getElementById('entryCodeInput').focus();
+    setTimeout(()=>err.style.display='none', 3000);
+  }
+}
+
+// ─── Admin: Edit & Delete Cards ───
+let editingId = null;
+
+function editCard(id){
+  if(!isAdmin){ return; }
+  const v = VIDEOS.find(x=>x.id===id);
+  if(!v) return;
+  editingId = id;
+  document.getElementById('editModalTitle').textContent = `Edit · Ep.${v.id} · ${v.creator}`;
+  document.getElementById('editCreator').value = v.creator.replace(/^@/,'');
+  document.getElementById('editLevel').value = v.level;
+  document.getElementById('editGender').value = v.gender;
+  document.getElementById('editTags').value = v.tags.join(', ');
+  document.getElementById('editAccent').value = v.accent;
+  document.getElementById('editModal').style.display = 'flex';
+}
+
+function closeEditModal(){
+  document.getElementById('editModal').style.display = 'none';
+  editingId = null;
+}
+
+function saveEditCard(){
+  const v = VIDEOS.find(x=>x.id===editingId);
+  if(!v) return;
+  const creator = document.getElementById('editCreator').value.trim();
+  v.creator = creator.startsWith('@') ? creator : '@'+creator;
+  v.level = document.getElementById('editLevel').value;
+  v.gender = document.getElementById('editGender').value;
+  v.accent = document.getElementById('editAccent').value;
+  const tagsRaw = document.getElementById('editTags').value;
+  v.tags = tagsRaw ? tagsRaw.split(/[,，]/).map(t=>t.trim()).filter(Boolean) : v.tags;
+  saveToStorage();
+  if (isAdmin) saveToCloud(v);
+  closeEditModal();
+  renderCards();
+  showAdminToast('Episode updated ✓');
+}
+
+function deleteCard(id){
+  if(!isAdmin) return;
+  if(!confirm(`Delete Ep.${id}? This cannot be undone.`)) return;
+  const v = VIDEOS.find(x=>x.id===id);
+  if (v && v._cloudId) deleteFromCloud(v._cloudId);
+  const idx = VIDEOS.findIndex(x=>x.id===id);
+  if(idx>-1){ VIDEOS.splice(idx,1); saved.delete(id); }
+  saveToStorage();
+  renderCards();
+  renderSavedList();
+  showAdminToast('Episode deleted.');
+}
+
+function deleteCardFromEdit(){
+  if(!editingId) return;
+  closeEditModal();
+  deleteCard(editingId);
+}
+
+
+// Change this to your own secret code!
+const ADMIN_CODE = 'hanlab2026';
+let isAdmin = false;
+
+function openInviteModal(){
+  if(isAdmin){ showAdminToast('You are already in Admin mode 🔓'); return; }
+  // Allow a logged-in user to upgrade to admin
+  document.getElementById('inviteModal').style.display = 'flex';
+  document.getElementById('inviteInput').value = '';
+  document.getElementById('inviteError').style.display = 'none';
+  setTimeout(()=>document.getElementById('inviteInput').focus(), 100);
+}
+function closeInviteModal(){
+  document.getElementById('inviteModal').style.display = 'none';
+}
+function checkInvite(){
+  const val = document.getElementById('inviteInput').value.trim();
+  if(val === ADMIN_CODE){
+    isAdmin = true;
+    localStorage.setItem('sr_access','admin');
+    closeInviteModal();
+    enableAdminMode();
+  } else {
+    document.getElementById('inviteError').style.display = 'block';
+    document.getElementById('inviteInput').value = '';
+    document.getElementById('inviteInput').focus();
+  }
+}
+function enableAdminMode(){
+  document.getElementById('addVideoBtn') && (document.getElementById('addVideoBtn').style.display = 'inline-flex');
+  const btn = document.getElementById('adminNavBtn');
+  if(btn){
+    btn.textContent = '🔓 Admin';
+    btn.style.color = '#2a8a2a';
+    btn.onclick = function(e){
+      e.preventDefault();
+      if(confirm('Log out of admin mode?')){
+        localStorage.removeItem('sr_access');
+        location.reload();
+      }
+    };
+  }
+  // Show attach video in player if open
+  const attachBtn = document.getElementById('attachVideoBtn');
+  if(attachBtn) attachBtn.style.display = 'inline-flex';
+  // Show API key zone
+  const kz = document.getElementById('apiKeyZone');
+  if(kz) kz.style.display = 'flex';
+  // Show cloud save button
+  const csb = document.getElementById('cloudSaveBtn');
+  if(csb) csb.style.display = 'inline-flex';
+  showAdminToast('Admin mode unlocked ✓ · 管理员模式已解锁');
+}
+function showAdminToast(msg){
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.2);';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 3000);
+}
+
+// ─── Attach video file to existing card ───
+function attachVideoFile(){
+  document.getElementById('attachFileInput').click();
+}
+function onAttachFile(input){
+  const file = input.files[0];
+  if(!file || !currentVideoId) return;
+  const v = VIDEOS.find(x=>x.id===currentVideoId);
+  if(!v) return;
+  // Revoke old blob if any
+  if(v.src && v.src.startsWith('blob:')) URL.revokeObjectURL(v.src);
+  v.src = URL.createObjectURL(file);
+  v.srcName = file.name;
+  // Update duration
+  const tmp = document.createElement('video');
+  tmp.src = v.src;
+  tmp.onloadedmetadata = ()=>{
+    const s = Math.round(tmp.duration);
+    v.dur = Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0');
+    saveToStorage();
+    renderCards();
+  };
+  // Rebuild player
+  const pw = document.getElementById('pmPlayerWrap');
+  pw.innerHTML = '';
+  playerVideo = document.createElement('video');
+  playerVideo.src = v.src;
+  playerVideo.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;';
+  playerVideo.addEventListener('timeupdate', onTimeUpdate);
+  playerVideo.addEventListener('play', ()=>document.getElementById('mainPlayBtn').textContent='⏸');
+  playerVideo.addEventListener('pause', ()=>document.getElementById('mainPlayBtn').textContent='▶');
+  playerVideo.addEventListener('ended', onVideoEnded);
+  pw.appendChild(playerVideo);
+  document.getElementById('videoArea').style.background = '#000';
+  showAdminToast('Video attached: ' + file.name);
+  input.value = '';
+}
+
+
+let OPENAI_KEY = '';
+function saveApiKey(){
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if(!val){ alert('Please enter your OpenAI API Key'); return; }
+  OPENAI_KEY = val;
+  document.getElementById('apiKeySaved').style.display = 'inline';
+  setTimeout(()=>document.getElementById('apiKeySaved').style.display='none', 3000);
+}
+
+// ─── 步骤更新 ───
+function setStep(n, state, msg){
+  // state: 'active' | 'done' | 'pending' | 'error'
+  const el = document.getElementById('transcriptSteps');
+  const icons = {active:'⏳', done:'✅', pending:'○', error:'❌'};
+  const colors = {active:'#333', done:'#2a8a2a', pending:'#bbb', error:'#c00'};
+  const steps = el.querySelectorAll('.step-item');
+  if(steps[n]){
+    steps[n].textContent = (icons[state]||'○')+' '+msg;
+    steps[n].style.color = colors[state]||'#333';
+  }
+}
+
+// ─── 主流程：Whisper 识别 + GPT 翻译 ───
+async function generateTranscript(){
+  if(!currentVideoId) return;
+  const v = VIDEOS.find(x=>x.id===currentVideoId);
+
+  if(!OPENAI_KEY){
+    // 提示填写 Key
+    document.getElementById('apiKeyInput').focus();
+    document.getElementById('apiKeyInput').style.borderColor='#e05';
+    setTimeout(()=>document.getElementById('apiKeyInput').style.borderColor='#e8d87a',1500);
+    alert('Please enter your OpenAI API Key above and click Save.');
+    return;
+  }
+
+  if(!v.src){
+    alert('此视频没有本地文件，无法识别语音。\n请先上传视频文件后再使用此功能。');
+    return;
+  }
+
+  const genBtn = document.getElementById('genBtn');
+  const stepsDiv = document.getElementById('transcriptSteps');
+
+  genBtn.disabled = true;
+  genBtn.textContent = 'Processing…';
+  document.getElementById('transcriptEmpty').style.display = 'none';
+  document.getElementById('sentenceList').innerHTML = '';
+
+  // 显示步骤
+  stepsDiv.style.display = 'flex';
+  stepsDiv.innerHTML = `
+    <div id="s0" style="font-size:13px;color:#ccc;">⏳ Step 1: Preparing audio file…</div>
+    <div id="s1" style="font-size:13px;color:#555;">○ Step 2: Whisper speech recognition…</div>
+    <div id="s2" style="font-size:13px;color:#555;">○ Step 3: GPT-4o translation…</div>`;
+
+  const stepEl = (i) => document.getElementById('s'+i);
+  const setS = (i, icon, color, msg) => { if(stepEl(i)){ stepEl(i).textContent=icon+' '+msg; stepEl(i).style.color=color; } };
+
+  try {
+    // ── Step 1：把视频 src 转成 Blob/File 供 Whisper 使用 ──
+  setS(0,'⏳','#ccc','Step 1: Extracting audio…');
+    let audioBlob;
+
+    const ytId = getYouTubeId(v.src);
+    if(ytId){
+      // YouTube video — cannot extract audio directly in browser
+      // Instead: ask admin to upload the local file via Attach Video first
+      throw new Error(
+        'YouTube videos cannot be transcribed directly from the browser due to security restrictions.\n\n' +
+        'Workflow for YouTube videos:\n' +
+        '1. Click "📎 Attach Video" and select the original local file\n' +
+        '2. Click "✦ Transcribe" — Whisper will process the local file\n' +
+        '3. Click "☁️ Save" to push the transcript to the cloud\n' +
+        '4. The transcript will be available for all users via the YouTube player.'
+      );
+    } else if(v.src && v.src.startsWith('blob:')){
+      // 本地上传的文件 → 直接用原 file 对象（通过 blob URL）
+      const resp = await fetch(v.src);
+      audioBlob = await resp.blob();
+    } else {
+      throw new Error('No video file attached.\nPlease use "📎 Attach Video" to load the local file first.');
+    }
+
+    // Whisper 支持的最大文件是 25MB，大文件需要截断
+    let finalBlob = audioBlob;
+    const MAX_BYTES = 24 * 1024 * 1024; // 24MB 留余量
+    if(audioBlob.size > MAX_BYTES){
+      finalBlob = audioBlob.slice(0, MAX_BYTES);
+    }
+
+    setS(0,'✅','#4caf50','Step 1: Audio ready (' + (finalBlob.size/1024/1024).toFixed(1) + ' MB)');
+    setS(1,'⏳','#ccc','Step 2: Whisper recognizing speech… (10–30 sec)');
+
+    // ── Step 2：调用 Whisper API ──
+    const formData = new FormData();
+    // 给文件命名时保留原始扩展名，Whisper 需要正确格式
+    const ext = (audioBlob.type.split('/')[1] || 'mp4').replace('quicktime','mov');
+    formData.append('file', finalBlob, 'audio.' + ext);
+    formData.append('model', 'whisper-1');
+    formData.append('language', 'zh');
+    formData.append('response_format', 'verbose_json'); // 拿到分段时间戳
+
+    const whisperResp = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + OPENAI_KEY },
+      body: formData
+    });
+
+    if(!whisperResp.ok){
+      const err = await whisperResp.json().catch(()=>({}));
+      throw new Error('Whisper 识别失败：' + (err.error?.message || whisperResp.status));
+    }
+
+    const whisperData = await whisperResp.json();
+    const chineseText = whisperData.text || '';
+    const segments = whisperData.segments || [];
+
+    if(!chineseText.trim()){
+      throw new Error('Whisper 未能识别出任何语音内容，请确认视频有清晰的Chinese语音。');
+    }
+
+    setS(1,'✅','#4caf50','第二步：识别完成，Total ' + chineseText.length + ' characters recognized');
+    setS(2,'⏳','#ccc','Step 3: GPT-4o translating + pinyin + timestamps…');
+
+    // ── Step 3：GPT-4o 翻译 + 注释 ──
+    const segInfo = segments.length ? '\n\n【Whisper 时间戳分段】\n'+segments.map(s=>`[${s.start.toFixed(1)}s-${s.end.toFixed(1)}s] ${s.text}`).join('\n') : '';
+    const gptPrompt = `你是专业Chinese学习助手。将以下Chinese语音识别文本处理为供英语学习者使用的逐句学习材料。
+
+【原始Chinese文本】
+${chineseText}${segInfo}
+
+【输出格式】JSON，结构如下：
+{
+  "sentences": [
+    {
+      "zh": "Chinese原句",
+      "pinyin": "带声调拼音（每字空格）",
+      "en": "自然English翻译",
+      "start": 0.0,
+      "end": 5.2,
+      "note": "语法/口语特点说明（可空）"
+    }
+  ],
+  "keywords": ["值得重点学习的词", "最多8个"],
+  "summary_en": "一句English总结视频主题"
+}
+
+要求：
+- start/end 从Whisper时间戳推断，单位秒
+- 拼音标声调：ā á ǎ à
+- English口语化贴近原文语气
+- 只返回JSON`;
+
+    const gptResp = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + OPENAI_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        response_format: { type: 'json_object' },
+        messages: [{ role: 'user', content: gptPrompt }],
+        max_tokens: 3000
+      })
+    });
+
+    if(!gptResp.ok){
+      const err = await gptResp.json().catch(()=>({}));
+      throw new Error('GPT 翻译失败：' + (err.error?.message || gptResp.status));
+    }
+
+    const gptData = await gptResp.json();
+    const raw = gptData.choices?.[0]?.message?.content || '{}';
+    let parsed;
+    try { parsed = JSON.parse(raw); } catch(e){ throw new Error('Failed to parse GPT response. Please try again.'); }
+
+    setS(2,'✅','#4caf50','Step 3: Translation complete!');
+
+    // 存储结构化 sentences
+    const sents = (parsed.sentences||[]).map(s=>({
+      zh: s.zh||'', en: s.en||'', pinyin: s.pinyin||'',
+      start: s.start!=null?parseFloat(s.start):null,
+      end: s.end!=null?parseFloat(s.end):null,
+      note: s.note||''
+    }));
+
+    // 关键词映射（用于高亮）
+    kwMap = {};
+    (parsed.keywords||[]).forEach((w,i)=>{ kwMap[w]=i; });
+
+    const v2 = VIDEOS.find(x=>x.id===currentVideoId);
+    v2._sentences = sents;
+    v2._transcriptPlain = sents.map(s=>`${s.zh}\n${s.pinyin}\n${s.en}`).join('\n\n');
+    currentSentences = sents;
+
+    stepsDiv.style.display = 'none';
+    renderSentenceList();
+    document.getElementById('genBtn').textContent = '↻ Re-transcribe';
+    saveToStorage(); // 保存文稿到本地
+    if (isAdmin) saveToCloud(v2); // 同步到云端
+
+    // 摘要显示在字幕区
+    if(parsed.summary_en){
+      document.getElementById('subEn').innerHTML = '<span style="font-size:13px;color:#888;">📋 ' + parsed.summary_en + '</span>';
+      document.getElementById('subZh').textContent = '（Video Summary）';
+    }
+
+  } catch(err) {
+    stepsDiv.style.display = 'none';
+    document.getElementById('transcriptEmpty').style.display = 'flex';
+    document.getElementById('transcriptEmpty').innerHTML = `<div style="color:#e05;font-size:13px;line-height:1.7;text-align:left;">❌ <strong>出错了</strong><br>${err.message.replace(/\n/g,'<br>')}</div>`;
+    genBtn.textContent = '↻ Retry';
+  }
+  genBtn.disabled = false;
+}
+
+// ─── 渲染文稿 HTML ───
+function buildTranscriptHTML(data, rawChinese){
+  const sentences = data.sentences || [];
+  const vocab = data.vocab || [];
+  const summary = data.summary || '';
+
+  let html = '';
+  let plain = '';
+
+  // 摘要
+  if(summary){
+    html += `<div style="background:#f0f7ff;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:#2776b8;">
+      <strong>📋 Summary：</strong>${summary}
+    </div>`;
+    plain += `Summary: ${summary}\n\n`;
+  }
+
+  // 逐句对照
+  if(sentences.length){
+    html += `<div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">`;
+    sentences.forEach((s, i) => {
+      html += `<div style="border-left:3px solid #e0e0e0;padding-left:12px;">
+        <div style="font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:3px;">${s.zh || ''}</div>
+        <div style="font-size:12px;color:#999;font-style:italic;margin-bottom:4px;">${s.pinyin || ''}</div>
+        <div style="font-size:13px;color:#2776b8;">${s.en || ''}</div>
+        ${s.note ? `<div style="font-size:11px;color:#aaa;margin-top:3px;">💡 ${s.note}</div>` : ''}
+      </div>`;
+      plain += `${s.zh}\n${s.pinyin}\n${s.en}\n${s.note?'💡 '+s.note+'\n':''}\n`;
+    });
+    html += `</div>`;
+  } else {
+    // fallback：直接显示原文
+    html += `<div style="font-size:14px;line-height:1.9;margin-bottom:16px;">${rawChinese}</div>`;
+    plain += rawChinese + '\n\n';
+  }
+
+  // 词汇表
+  if(vocab.length){
+    html += `<div style="border-top:1px solid #eee;padding-top:14px;">
+      <div style="font-size:12px;font-weight:700;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">📖 重点词汇 Key Vocabulary</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">`;
+    vocab.forEach(v=>{
+      html += `<div style="background:#fffbeb;border:1px solid #f5e68a;border-radius:10px;padding:10px 12px;">
+        <div style="font-size:16px;font-weight:700;color:#1a1a1a;">${v.word}</div>
+        <div style="font-size:12px;color:#999;font-style:italic;">${v.pinyin||''}</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;">${v.en||''}</div>
+        ${v.example?`<div style="font-size:11px;color:#aaa;margin-top:4px;border-top:1px solid #f0e8a0;padding-top:4px;">e.g. ${v.example}</div>`:''}
+      </div>`;
+      plain += `【${v.word}】${v.pinyin} - ${v.en}${v.example?' / e.g. '+v.example:''}\n`;
+    });
+    html += `</div></div>`;
+  }
+
+  return { html, plain };
+}
+
+function adminSaveCurrent(){
+  if(!currentVideoId || !isAdmin) return;
+  const v = VIDEOS.find(x=>x.id===currentVideoId);
+  if(!v){ showAdminToast('No video selected'); return; }
+  saveToCloud(v);
+}
+
+function copyTranscript(){
+  const v = VIDEOS.find(x=>x.id===currentVideoId);
+  if(!v||!v._transcriptPlain) return;
+  navigator.clipboard.writeText(v._transcriptPlain).then(()=>{
+    const btn = document.getElementById('copyBtn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(()=>btn.textContent=orig, 1500);
+  });
+}
+
+// ─── localStorage 持久化 ───
+// ─── Supabase config ───
+const SUPA_URL = 'https://kuiwdnkwdwxtobhoycoc.supabase.co';
+const SUPA_KEY = 'sb_publishable_P0rnMBSRF6xJ7wY7jP9Idg_B9b8x0fa';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+const STORAGE_KEY = 'speakreal_v1';
+
+// ─── Save video + sentences to Supabase (admin only) ───
+async function saveToCloud(v) {
+  try {
+    // Upsert video row
+    const videoRow = {
+      creator: v.creator,
+      dur: v.dur,
+      flag: v.flag || '🇨🇳',
+      tags: v.tags,
+      accent: v.accent,
+      level: v.level,
+      gender: v.gender,
+      theme: v.t,
+      src_url: v.src && !v.src.startsWith('blob:') ? v.src : null,
+      src_name: v.srcName || '',
+      user_uploaded: true
+    };
+
+    let videoId = v._cloudId;
+    if (videoId) {
+      await supa.from('videos').update(videoRow).eq('id', videoId);
+    } else {
+      const { data, error } = await supa.from('videos').insert(videoRow).select('id').single();
+      if (error) throw error;
+      videoId = data.id;
+      v._cloudId = videoId;
+    }
+
+    // Save sentences
+    if (v._sentences && v._sentences.length > 0) {
+      await supa.from('sentences').delete().eq('video_id', videoId);
+      const rows = v._sentences.map((s, idx) => ({
+        video_id: videoId,
+        idx,
+        zh: s.zh,
+        pinyin: s.pinyin,
+        en: s.en,
+        start_time: s.start,
+        end_time: s.end,
+        note: s.note || ''
+      }));
+      await supa.from('sentences').insert(rows);
+    }
+
+    // Save keywords
+    if (v._keywords && v._keywords.length > 0) {
+      await supa.from('video_keywords').delete().eq('video_id', videoId);
+      const kwRows = v._keywords.map(w => ({ video_id: videoId, word: w }));
+      await supa.from('video_keywords').insert(kwRows);
+    }
+
+    showAdminToast('✅ Saved to cloud!');
+    return videoId;
+  } catch (e) {
+    console.error('Cloud save error:', e);
+    showAdminToast('❌ Cloud save failed: ' + e.message);
+  }
+}
+
+// ─── Delete video from Supabase ───
+async function deleteFromCloud(cloudId) {
+  if (!cloudId) return;
+  await supa.from('videos').delete().eq('id', cloudId);
+}
+
+// ─── Load all videos + sentences from Supabase ───
+async function loadFromCloud() {
+  try {
+    const { data: vids, error } = await supa.from('videos').select('*').order('id', { ascending: true });
+    if (error) throw error;
+    if (!vids || vids.length === 0) return;
+
+    // Load sentences for all videos in one query
+    const videoIds = vids.map(v => v.id);
+    const { data: allSents } = await supa.from('sentences').select('*').in('video_id', videoIds).order('idx');
+    const { data: allKws } = await supa.from('video_keywords').select('*').in('video_id', videoIds);
+
+    // Clear existing cloud-sourced videos (keep local-only ones)
+    const cloudIds = new Set(vids.map(v => v.id));
+    // Remove old cloud videos
+    for (let i = VIDEOS.length - 1; i >= 0; i--) {
+      if (VIDEOS[i]._cloudId) VIDEOS.splice(i, 1);
+    }
+
+    vids.forEach(v => {
+      const sents = (allSents || []).filter(s => s.video_id === v.id).map(s => ({
+        zh: s.zh, pinyin: s.pinyin, en: s.en,
+        start: s.start_time, end: s.end_time, note: s.note
+      }));
+      const kws = (allKws || []).filter(k => k.video_id === v.id).map(k => k.word);
+
+      // Check if already in VIDEOS array
+      const existing = VIDEOS.find(x => x._cloudId === v.id);
+      if (existing) {
+        existing._sentences = sents;
+        existing._keywords = kws;
+      } else {
+        VIDEOS.push({
+          id: v.id + 10000, // offset to avoid collision with built-in IDs
+          _cloudId: v.id,
+          dur: v.dur || '0:00',
+          creator: v.creator,
+          flag: v.flag || '🇨🇳',
+          tags: v.tags || [],
+          accent: v.accent,
+          level: v.level,
+          gender: v.gender,
+          t: v.theme || 't1',
+          src: v.src_url || null,
+          srcName: v.src_name || '',
+          userUploaded: true,
+          _sentences: sents,
+          _keywords: kws,
+          _transcriptPlain: sents.map(s => s.zh + '\n' + s.pinyin + '\n' + s.en).join('\n\n')
+        });
+        if (v.id >= nextId) nextId = v.id + 10001;
+      }
+    });
+
+    renderCards();
+  } catch (e) {
+    console.error('Cloud load error:', e);
+  }
+}
+
+function saveToStorage(){
+  try {
+    // blob URL 无法跨会话保存，只保存元数据和文稿，不保存 src
+    const toSave = VIDEOS.filter(v=>v.userUploaded).map(v=>({
+      id: v.id, dur: v.dur, creator: v.creator, flag: v.flag,
+      tags: v.tags, accent: v.accent, level: v.level, gender: v.gender,
+      t: v.t, userUploaded: true,
+      _sentences: v._sentences || [],
+      _transcriptPlain: v._transcriptPlain || '',
+      // src 是 blob:// 无法保存，设为 null，但显示提示
+      srcName: v.srcName || ''
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({videos: toSave, nextId}));
+  } catch(e){ console.warn('Save failed', e); }
+}
+
+function loadFromStorage(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    if(data.nextId) nextId = Math.max(nextId, data.nextId);
+    (data.videos||[]).forEach(v=>{
+      if(!VIDEOS.find(x=>x.id===v.id)){
+        VIDEOS.push({...v, src: null, transcript: v._transcriptPlain ? 'restored' : null});
+      }
+    });
+  } catch(e){ console.warn('Load failed', e); }
+}
+
+
+function openUploadModal(){
+  resetUploadModal();
+  document.getElementById('uploadModal').classList.add('open');
+}
+function closeUploadModal(){
+  document.getElementById('uploadModal').classList.remove('open');
+  selectedFile = null;
+}
+function resetUploadModal(){
+  selectedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('fileSelectedWrap').style.display = 'none';
+  document.getElementById('dropZone').style.display = 'flex';
+  document.getElementById('videoUrl').value = '';
+  document.getElementById('inputCreator').value = '';
+  document.getElementById('inputAccent').value = '普通话';
+  document.getElementById('inputLevel').value = '初级';
+  document.getElementById('inputGender').value = 'female';
+  document.getElementById('inputTags').value = '';
+  document.getElementById('uploadProgress').style.display = 'none';
+}
+
+function handleFileSelect(input){
+  const file = input.files[0];
+  if(!file) return;
+  selectedFile = file;
+  const sz = file.size > 1048576 ? (file.size/1048576).toFixed(1)+' MB' : (file.size/1024).toFixed(0)+' KB';
+  document.getElementById('dropZone').style.display = 'none';
+  document.getElementById('fileSelectedWrap').style.display = 'block';
+  document.getElementById('fileSelectedWrap').innerHTML = `
+    <div class="file-selected">
+      <span style="font-size:20px;">🎬</span>
+      <span class="fs-name">${file.name}</span>
+      <span class="fs-size">${sz}</span>
+      <button class="fs-remove" onclick="removeFile()" title="移除">✕</button>
+    </div>`;
+}
+
+function removeFile(){
+  selectedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('fileSelectedWrap').style.display = 'none';
+  document.getElementById('dropZone').style.display = 'flex';
+}
+
+// 拖拽支持
+document.addEventListener('DOMContentLoaded', ()=>{
+  const dz = document.getElementById('dropZone');
+  dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave', ()=>dz.classList.remove('drag-over'));
+  dz.addEventListener('drop', e=>{
+    e.preventDefault();
+    dz.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if(file && file.type.startsWith('video/')){
+      document.getElementById('fileInput').files; // just trigger
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      document.getElementById('fileInput').files = dt.files;
+      handleFileSelect(document.getElementById('fileInput'));
+    }
+  });
+});
+
+function submitUpload(){
+  const creator = document.getElementById('inputCreator').value.trim() || '@匿名用户';
+  const accent = document.getElementById('inputAccent').value;
+  const level = document.getElementById('inputLevel').value;
+  const gender = document.getElementById('inputGender').value;
+  const tagsRaw = document.getElementById('inputTags').value;
+  const tags = tagsRaw ? tagsRaw.split(/[,，]/).map(t=>t.trim()).filter(Boolean) : ['日常'];
+  const urlInput = document.getElementById('videoUrl').value.trim();
+
+  if(!selectedFile && !urlInput){
+    alert('Please upload a video file or enter a video URL.');
+    return;
+  }
+
+  const progress = document.getElementById('uploadProgress');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+  progress.style.display = 'block';
+
+  let pct = 0;
+  const timer = setInterval(()=>{
+    pct = Math.min(pct + Math.random()*15, 90);
+    fill.style.width = pct+'%';
+    label.textContent = pct < 40 ? 'Reading file…' : pct < 75 ? 'Processing…' : 'Almost done…';
+  }, 200);
+
+  setTimeout(()=>{
+    clearInterval(timer);
+    fill.style.width = '100%';
+    label.textContent = 'Added!';
+
+    let src = null;
+    if(selectedFile){
+      src = URL.createObjectURL(selectedFile);
+    } else if(urlInput){
+      src = urlInput;
+    }
+
+    // 计算时长（如果是文件）
+    let dur = '0:00';
+    const newVideo = {
+      id: nextId++,
+      dur,
+      creator: creator.startsWith('@') ? creator : '@'+creator,
+      flag: '🇨🇳',
+      tags,
+      accent,
+      level,
+      gender,
+      t: THEMES[Math.floor(Math.random()*THEMES.length)],
+      src,
+      transcript: null,
+      userUploaded: true,
+      srcName: selectedFile ? selectedFile.name : urlInput
+    };
+
+    if(src && selectedFile){
+      const tempVid = document.createElement('video');
+      tempVid.src = src;
+      tempVid.onloadedmetadata = ()=>{
+        const s = Math.round(tempVid.duration);
+        newVideo.dur = Math.floor(s/60)+':'+(s%60).toString().padStart(2,'0');
+        VIDEOS.push(newVideo);
+        finishUpload();
+      };
+      tempVid.onerror = ()=>{ VIDEOS.push(newVideo); finishUpload(); };
+    } else {
+      VIDEOS.push(newVideo);
+      finishUpload();
+    }
+  }, 1800);
+
+  function finishUpload(){
+    setTimeout(()=>{
+      closeUploadModal();
+      saveToStorage(); // saved locally
+      renderCards();
+      const added = VIDEOS[VIDEOS.length-1];
+      setTimeout(()=>openCard(added.id), 200);
+    }, 400);
+  }
+}
+
+// ─── 筛选 ───
+function clearFilters(){
+  filters={accent:'all',gender:'all',topic:'all',level:null};
+  document.querySelectorAll('.tag').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('[data-val="all"]').forEach(t=>t.classList.add('active'));
+  document.querySelectorAll('[data-val="asc"]').forEach(t=>t.classList.add('active'));
+  document.getElementById('searchInput').value='';
+  renderCards();
+}
+
+function toggleTopics(){
+  const w=document.getElementById('topicWrap');
+  const b=document.getElementById('topicToggle');
+  w.classList.toggle('open');
+  b.textContent=w.classList.contains('open')?'Collapse 收起 ▲':'Show All 展开 ▼';
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('.tag').forEach(tag=>{
+    tag.addEventListener('click',function(){
+      const g=this.dataset.group, v=this.dataset.val;
+      if(g==='sort'){
+        document.querySelectorAll('[data-group="sort"]').forEach(t=>t.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('sortSel').value=v;
+      } else {
+        const siblings=document.querySelectorAll('[data-group="'+g+'"]');
+        siblings.forEach(s=>s.classList.remove('active'));
+        this.classList.add('active');
+        if(g==='accent') filters.accent=v;
+        else if(g==='gender') filters.gender=v;
+        else if(g==='topic') filters.topic=v;
+        else if(g==='level'){
+          if(filters.level===v){ filters.level=null; this.classList.remove('active'); }
+          else { filters.level=v; }
+        }
+      }
+      renderCards();
+    });
+  });
+
+  // 点击遮罩关闭modal
+  document.getElementById('uploadModal').addEventListener('click', function(e){ if(e.target===this) closeUploadModal(); });
+  document.getElementById('editModal').addEventListener('click', function(e){ if(e.target===this) closeEditModal(); });
+  document.getElementById('inviteModal').addEventListener('click', function(e){ if(e.target===this) closeInviteModal(); });
+
+  // Entry gate — check if already authenticated this session
+  const srAccess = localStorage.getItem('sr_access');
+  if(srAccess === 'admin'){
+    document.getElementById('entryGate').style.display = 'none';
+    isAdmin = true;
+    enableAdminMode();
+  } else if(srAccess === 'user'){
+    document.getElementById('entryGate').style.display = 'none';
+  } else {
+    // Show gate, blur the page behind it
+    document.getElementById('entryGate').style.display = 'flex';
+    setTimeout(()=>document.getElementById('entryCodeInput').focus(), 200);
+  }
+
+  // 加载本地数据 + 云端数据
+  loadFromStorage();
+  renderCards();
+  loadFromCloud(); // 从 Supabase 加载云端视频
+});
+</script>
+
+
+</body></html>
