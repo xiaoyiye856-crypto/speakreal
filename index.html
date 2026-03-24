@@ -1174,35 +1174,116 @@
 
   
 
+  
+
   /* ══════ MOBILE ══════ */
   @media (max-width: 768px) {
+    /* Main library */
     .main-layout { flex-direction: column !important; }
     .sidebar { display: none !important; }
     .content-area { padding: 8px !important; }
     .cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
 
+    /* Player modal full screen */
     #playerModal { flex-direction: column !important; overflow: hidden !important; }
-    #pmHeader { padding: 6px 10px !important; flex-wrap: wrap !important; gap: 4px !important; }
-    #pmHeader .mode-btn { padding: 3px 8px !important; font-size: 10px !important; }
+
+    /* HEADER: very compact, single line */
+    #pmHeader {
+      padding: 4px 10px !important;
+      min-height: unset !important;
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      gap: 6px !important;
+      overflow: hidden !important;
+    }
+    /* Back button + title compact */
+    #pmHeader > div:first-child {
+      flex-shrink: 0 !important;
+    }
+    #pmTitle {
+      font-size: 11px !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 120px !important;
+    }
+    #pmSub {
+      font-size: 9px !important;
+      white-space: nowrap !important;
+    }
+    /* Mode tabs: compact horizontal scroll */
+    #pmHeader > div:nth-child(2) {
+      flex: 1 !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      display: flex !important;
+      gap: 3px !important;
+      scrollbar-width: none !important;
+    }
+    #pmHeader > div:nth-child(2)::-webkit-scrollbar { display: none !important; }
+    .mode-btn {
+      padding: 3px 8px !important;
+      font-size: 10px !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
     #apiKeyZone { display: none !important; }
     #cloudSaveBtn { display: none !important; }
 
+    /* Body: column */
     #pmBody { flex-direction: column !important; flex: 1 !important; overflow: hidden !important; }
-
     #pmLeft { flex: none !important; width: 100% !important; }
-    #videoArea { height: 56vw !important; min-height: 180px !important; max-height: 240px !important; flex: none !important; }
-    #pmPlayerWrap { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
-    #pmPlayerWrap iframe { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; }
 
-    #subtitleBar { padding: 8px 12px !important; min-height: 54px !important; flex-shrink: 0 !important; }
+    /* Video: right at top, 16:9 */
+    #videoArea {
+      height: 56vw !important;
+      min-height: 190px !important;
+      max-height: 250px !important;
+      flex: none !important;
+      width: 100% !important;
+    }
+    #pmPlayerWrap {
+      position: absolute !important;
+      inset: 0 !important;
+    }
+    #pmPlayerWrap iframe {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+    }
+
+    /* Subtitle: compact */
+    #subtitleBar {
+      padding: 6px 12px !important;
+      min-height: 48px !important;
+      flex-shrink: 0 !important;
+    }
     #subZh { font-size: 15px !important; }
     #subEn { font-size: 12px !important; }
 
-    #pmControls { padding: 6px 8px !important; gap: 4px !important; overflow-x: auto !important; justify-content: center !important; }
-    #pmControls button { font-size: 10px !important; padding: 4px 7px !important; white-space: nowrap !important; }
+    /* Controls: compact */
+    #pmControls {
+      padding: 5px 8px !important;
+      gap: 4px !important;
+      justify-content: center !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      flex-shrink: 0 !important;
+    }
+    #pmControls button { font-size: 11px !important; padding: 5px 8px !important; }
 
-    #pmRight { flex: 1 !important; width: 100% !important; border-left: none !important; border-top: 1px solid #e8e0d0 !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; }
-    #transcriptPanel { flex: 1 !important; overflow-y: auto !important; padding: 8px 10px !important; }
+    /* Transcript: fills remaining space, scrollable */
+    #pmRight {
+      flex: 1 !important;
+      width: 100% !important;
+      border-left: none !important;
+      border-top: 1px solid #e8e0d0 !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      min-height: 0 !important;
+    }
+    #transcriptPanel { padding: 8px 10px !important; }
     .sent-zh { font-size: 15px !important; }
     .sent-pinyin { font-size: 11px !important; }
     .sent-en { font-size: 12px !important; }
