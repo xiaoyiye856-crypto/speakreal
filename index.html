@@ -1422,7 +1422,8 @@ function renderCards(){
     const levelLabel = {入门:'Beginner',初级:'Elementary',中级:'Intermediate',高级:'Advanced'}[v.level]||v.level;
     const hasYT = v.src && (v.src.includes('youtube') || v.src.includes('youtu.be'));
     const adminTools = isAdmin ? `<div class="admin-card-tools">
-      <button onclick="event.stopPropagation();linkYouTube(${v.id})" title="${hasYT ? 'Change YouTube Link' : 'Link YouTube'}" style="font-size:15px;">${hasYT ? '🔗' : '📎'}</button>
+      <button onclick="event.stopPropagation();linkYouTube(${v.id})" title="${hasYT ? 'Change YouTube Link' : 'Add YouTube Link'}" style="font-size:15px;">${hasYT ? '🔗' : '📎'}</button>
+      ${hasYT ? `<button onclick="event.stopPropagation();copyYTLink(${v.id})" title="Copy YouTube Link" style="font-size:15px;">📋</button>` : ''}
       <button onclick="event.stopPropagation();editCard(${v.id})" title="Edit">✏️</button>
       <button onclick="event.stopPropagation();deleteCard(${v.id})" title="Delete">🗑️</button>
     </div>` : '';
@@ -1559,6 +1560,25 @@ let speedIdx = 2;
 
 // ─── 打开播放器 ───
 function openCard(id){
+  currentVideoId = id;
+  const v = VIDEOS.find(x=>x.id===id);
+  if(!v) return;
+  // If video has cloudId but no src, fetch from Supabase first
+  if(!v.src && v._cloudId && typeof supa !== 'undefined'){
+    supa.from('videos').select('src_url, src_name').eq('id', v._cloudId).single()
+      .then(({data})=>{
+        if(data && data.src_url){
+          v.src = data.src_url;
+          v.srcName = data.src_name || 'YouTube';
+        }
+        _openCardNow(id);
+      }).catch(()=> _openCardNow(id));
+    return;
+  }
+  _openCardNow(id);
+}
+
+function _openCardNow(id){
   currentVideoId = id;
   const v = VIDEOS.find(x=>x.id===id);
 
@@ -1887,6 +1907,23 @@ function checkEntryCode(){
 }
 
 // ─── Admin: Link YouTube to existing card ───
+function copyYTLink(id){
+  const v = VIDEOS.find(x=>x.id===id);
+  if(!v || !v.src) return;
+  navigator.clipboard.writeText(v.src).then(()=>{
+    showAdminToast('📋 Copied: ' + v.src);
+  }).catch(()=>{
+    // Fallback
+    const el = document.createElement('textarea');
+    el.value = v.src;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showAdminToast('📋 Copied: ' + v.src);
+  });
+}
+
 function linkYouTube(id){
   if(!isAdmin) return;
   const v = VIDEOS.find(x=>x.id===id);
