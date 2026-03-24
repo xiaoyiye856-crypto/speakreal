@@ -1572,6 +1572,17 @@ function openCard(id){
   const pw = document.getElementById('pmPlayerWrap');
   playerVideo = null;
 
+  // If src missing but cloudId exists, fetch from Supabase first
+  if(!v.src && v._cloudId && typeof supa !== 'undefined'){
+    pw.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#aaa;font-size:14px;">⏳ Loading...</div>';
+    supa.from('videos').select('src_url').eq('id', v._cloudId).single()
+      .then(({data})=>{
+        if(data && data.src_url){ v.src = data.src_url; }
+        openCard(id);
+      });
+    return;
+  }
+
   const ytId = getYouTubeId(v.src);
 
   if(ytId){
