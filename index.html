@@ -1169,6 +1169,94 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.15); transition: transform 0.1s;
 }
 .admin-card-tools button:hover { transform: scale(1.15); }
+
+  /* ══════════ MOBILE RESPONSIVE ══════════ */
+  @media (max-width: 768px) {
+
+    /* Header */
+    header { padding: 8px 14px !important; }
+    .logo h1 { font-size: 18px !important; }
+    .logo .subtitle { font-size: 9px !important; }
+    #adminBtn { font-size: 11px !important; padding: 4px 8px !important; }
+
+    /* Main layout */
+    .main-layout { flex-direction: column !important; }
+    .sidebar { display: none !important; }
+    .content-area { padding: 10px !important; }
+    .cards-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+
+    /* Player Modal - full screen stack */
+    #playerModal { overflow-y: auto !important; }
+
+    /* Player header */
+    #playerModal > div:first-child {
+      padding: 8px 12px !important;
+      flex-wrap: wrap !important;
+      gap: 4px !important;
+    }
+
+    /* Player body - stack vertically */
+    #playerInner {
+      flex-direction: column !important;
+      overflow: visible !important;
+      height: auto !important;
+    }
+
+    /* Video area - full width, 16:9 ratio */
+    #videoArea {
+      width: 100% !important;
+      flex: none !important;
+      height: 56.25vw !important;
+      min-height: 200px !important;
+      max-height: 260px !important;
+    }
+
+    /* YouTube iframe fills video area */
+    #videoArea iframe {
+      position: absolute !important;
+      top: 0 !important; left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Subtitle bar */
+    #subtitleBar {
+      padding: 8px 12px !important;
+      min-height: 60px !important;
+    }
+    #subZh { font-size: 17px !important; }
+    #subPinyin { font-size: 12px !important; }
+    #subEn { font-size: 13px !important; }
+
+    /* Transcript panel - full width below video */
+    #transcriptPanel {
+      width: 100% !important;
+      min-width: unset !important;
+      height: 45vh !important;
+      border-left: none !important;
+      border-top: 2px solid #e8e0d0 !important;
+    }
+
+    /* Controls bar */
+    .player-controls {
+      padding: 8px 10px !important;
+      gap: 5px !important;
+      flex-wrap: wrap !important;
+      justify-content: center !important;
+    }
+    .player-controls button { font-size: 11px !important; padding: 5px 8px !important; }
+
+    /* Mode tabs */
+    .mode-tabs { gap: 3px !important; overflow-x: auto !important; }
+    .mode-tab { padding: 4px 8px !important; font-size: 11px !important; white-space: nowrap !important; }
+
+    /* Hide API key zone on mobile */
+    #apiKeyZone { display: none !important; }
+
+    /* Admin toast */
+    #adminToast { bottom: 70px !important; font-size: 12px !important; }
+  }
+  /* ══════════════════════════════════════ */
 </style>
 
 <!-- ─── Edit Card Modal (Admin) ─── -->
