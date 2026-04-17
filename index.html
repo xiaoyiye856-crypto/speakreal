@@ -2,7 +2,7 @@
 <!-- saved from url=(0073)file:///Users/nathalie/Downloads/hanlab-chinese-learning-bilingual_5.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SpeakReal · Learn English from Real Vlogs</title>
 <style>
@@ -1704,9 +1704,11 @@ function _openCardNow(id){
     const iframe = document.createElement('iframe');
     iframe.id = 'ytPlayer';
     iframe.style.cssText = 'width:100%;height:100%;border:none;position:absolute;inset:0;';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
     iframe.allowFullscreen = true;
-    iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?enablejsapi=1&rel=0&modestbranding=1&playsinline=1`;
+    iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-popups allow-forms');
+    iframe.src = `https://www.youtube.com/embed/${ytId}?enablejsapi=1&rel=0&modestbranding=1&playsinline=1&origin=${encodeURIComponent(location.origin)}`;
     pw.appendChild(iframe);
 
     // Load YouTube IFrame API for JS control
@@ -2486,7 +2488,7 @@ function copyTranscript(){
 // ─── localStorage 持久化 ───
 // ─── Supabase config ───
 const SUPA_URL = 'https://kuiwdnkwdwxtobhoycoc.supabase.co';
-const SUPA_KEY = 'sb_publishable_P0rnMBSRF6xJ7wY7jP9Idg_B9b8x0fa';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aXdkbmt3ZHd4dG9iaG95Y29jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4Mjk5NTksImV4cCI6MjA4OTQwNTk1OX0.kQgi0BCuWDSXNNyamqHEGFeJNeKtywB1feJRKh7_eMk';
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 
 const STORAGE_KEY = 'speakreal_v1';
@@ -2560,7 +2562,10 @@ async function deleteFromCloud(cloudId) {
 async function loadFromCloud() {
   try {
     const { data: vids, error } = await supa.from('videos').select('*').order('id', { ascending: true });
-    if (error) throw error;
+    if (error) {
+      console.error('Cloud load error details:', error.message, error.code, error.details, error.hint, JSON.stringify(error));
+      throw error;
+    }
     if (!vids || vids.length === 0) return;
 
     // Load sentences for all videos in one query
@@ -2612,7 +2617,7 @@ async function loadFromCloud() {
 
     renderCards();
   } catch (e) {
-    console.error('Cloud load error:', e);
+    console.error('Cloud load error:', JSON.stringify(e), e.message, e.code, e.details, e.hint);
   }
 }
 
