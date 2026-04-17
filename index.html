@@ -1449,28 +1449,7 @@
 
 <script>
 // ─── 数据 ───
-const VIDEOS = [
-  {id:1,dur:'1:32',creator:'@李明Ming',flag:'🇨🇳',tags:['日常','生活'],level:'初级',gender:'male',t:'t1',src:null,transcript:null},
-  {id:2,dur:'2:15',creator:'@小雅Xiao',flag:'🇨🇳',tags:['旅行','文化'],level:'中级',gender:'female',t:'t2',src:null,transcript:null},
-  {id:3,dur:'1:45',creator:'@阿强Aqiang',flag:'🇨🇳',tags:['美食','烹饪'],level:'中级',gender:'male',t:'t3',src:null,transcript:null},
-  {id:4,dur:'3:02',creator:'@思思Sisi',flag:'🇨🇳',tags:['情感','成长'],level:'高级',gender:'female',t:'t4',src:null,transcript:null},
-  {id:5,dur:'1:18',creator:'@文哥Wenge',flag:'🇨🇳',tags:['科技','数码'],level:'初级',gender:'male',t:'t5',src:null,transcript:null},
-  {id:6,dur:'2:40',creator:'@嘉嘉Jiajia',flag:'🇨🇳',tags:['时尚','购物'],level:'初级',gender:'female',t:'t6',src:null,transcript:null},
-  {id:7,dur:'1:55',creator:'@大壮Dazhuang',flag:'🇨🇳',tags:['运动','户外'],level:'入门',gender:'male',t:'t7',src:null,transcript:null},
-  {id:8,dur:'2:28',creator:'@晓燕Xiaoyan',flag:'🇨🇳',tags:['宠物','日常'],level:'初级',gender:'female',t:'t8',src:null,transcript:null},
-  {id:9,dur:'1:10',creator:'@阿明Aming',flag:'🇨🇳',tags:['美食','生活'],level:'入门',gender:'male',t:'t1',src:null,transcript:null},
-  {id:10,dur:'3:30',creator:'@悦悦Yueyue',flag:'🇨🇳',tags:['音乐','创作'],level:'高级',gender:'female',t:'t2',src:null,transcript:null},
-  {id:11,dur:'2:05',creator:'@浩然Haoran',flag:'🇨🇳',tags:['职场','商务'],level:'中级',gender:'male',t:'t3',src:null,transcript:null},
-  {id:12,dur:'1:42',creator:'@小莹Xiaoying',flag:'🇨🇳',tags:['健康','生活'],level:'初级',gender:'female',t:'t4',src:null,transcript:null},
-  {id:13,dur:'2:55',creator:'@大牛Daniu',flag:'🇨🇳',tags:['旅行','户外'],level:'中级',gender:'male',t:'t5',src:null,transcript:null},
-  {id:14,dur:'1:38',creator:'@璐璐Lulu',flag:'🇨🇳',tags:['家居','生活'],level:'初级',gender:'female',t:'t6',src:null,transcript:null},
-  {id:15,dur:'2:12',creator:'@子轩Zixuan',flag:'🇨🇳',tags:['学习','阅读'],level:'中级',gender:'male',t:'t7',src:null,transcript:null},
-  {id:16,dur:'1:50',creator:'@彩虹Caihong',flag:'🇨🇳',tags:['摄影','创作'],level:'初级',gender:'female',t:'t8',src:null,transcript:null},
-  {id:17,dur:'3:15',creator:'@老吴Laowu',flag:'🇨🇳',tags:['文化','历史'],level:'高级',gender:'male',t:'t1',src:null,transcript:null},
-  {id:18,dur:'1:25',creator:'@萌萌Mengmeng',flag:'🇨🇳',tags:['娱乐','综艺'],level:'入门',gender:'female',t:'t2',src:null,transcript:null},
-  {id:19,dur:'2:35',creator:'@志远Zhiyuan',flag:'🇨🇳',tags:['科技','游戏'],level:'中级',gender:'male',t:'t3',src:null,transcript:null},
-  {id:20,dur:'1:48',creator:'@佳佳Jiajia',flag:'🇨🇳',tags:['情感','心理'],level:'中级',gender:'female',t:'t4',src:null,transcript:null},
-];
+const VIDEOS = [];
 
 const THEMES = ['t1','t2','t3','t4','t5','t6','t7','t8'];
 let nextId = 21;
@@ -2495,6 +2474,9 @@ const STORAGE_KEY = 'speakreal_v1';
 
 // ─── Save video + sentences to Supabase (admin only) ───
 async function saveToCloud(v) {
+  // 只允许保存有 _cloudId 的视频（update），或者用户新上传的视频（insert）
+  // 防止重复写入
+  if (!v._cloudId && !v.userUploaded) return;
   try {
     // Upsert video row
     const videoRow = {
@@ -2644,8 +2626,8 @@ function loadFromStorage(){
     const data = JSON.parse(raw);
     if(data.nextId) nextId = Math.max(nextId, data.nextId);
     (data.videos||[]).forEach(v=>{
-      if(!VIDEOS.find(x=>x.id===v.id)){
-        VIDEOS.push({...v, src: null, transcript: v._transcriptPlain ? 'restored' : null});
+      if(!VIDEOS.find(x=>x.id===v.id) && !VIDEOS.find(x=>x._cloudId && x._cloudId===v._cloudId)){
+        VIDEOS.push({...v, src: v.src||null, transcript: v._transcriptPlain ? 'restored' : null});
       }
     });
   } catch(e){ console.warn('Load failed', e); }
